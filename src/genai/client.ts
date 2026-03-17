@@ -11,9 +11,11 @@ import {Sessions} from './sessions';
 
 export const SDK_VERSION = '1.10.1';  // x-release-please-version
 
+let agentEnginesInternalWarned = false;
+
 export class Client {
   protected readonly apiClient: ApiClient;
-  public readonly agentEnginesInternal: AgentEngines;
+  public readonly _agentEnginesInternal: AgentEngines;
 
   constructor(
       options: {project?: string; location?: string; apiEndpoint?: string;}) {
@@ -38,6 +40,18 @@ export class Client {
     });
 
 
-    this.agentEnginesInternal = new AgentEngines(this.apiClient);
+    this._agentEnginesInternal = new AgentEngines(this.apiClient);
+  }
+
+  /**
+   * Getter for agentEnginesInternal that logs a warning on first use.
+   */
+  public get agentEnginesInternal(): AgentEngines {
+    if (!agentEnginesInternalWarned) {
+      console.warn(
+          'The agentEnginesInternal implementation is experimental, and may change in future versions.');
+      agentEnginesInternalWarned = true;
+    }
+    return this._agentEnginesInternal;
   }
 }

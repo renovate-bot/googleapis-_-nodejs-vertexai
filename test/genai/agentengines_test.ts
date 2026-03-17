@@ -78,4 +78,22 @@ describe('AgentEngines', () => {
 
     client.verifyAllInteractions();
   });
+
+
+  it('logs an experimental warning only once when agentEnginesInternal is accessed',
+     () => {
+       const warnSpy = spyOn(console, 'warn');
+       const aeClient1 = client.agentEnginesInternal;
+       const firstAccessCount = warnSpy.calls.count();
+
+       expect(firstAccessCount).toBeLessThanOrEqual(1);
+
+       if (firstAccessCount === 1) {
+         expect(warnSpy).toHaveBeenCalledWith(jasmine.stringMatching(
+             /agentEnginesInternal module is experimental/));
+       }
+
+       const aeClient2 = client.agentEnginesInternal;
+       expect(warnSpy.calls.count()).toBe(firstAccessCount);
+     });
 });
