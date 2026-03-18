@@ -1005,6 +1005,135 @@ export declare interface UpdateAgentEngineSessionRequestParameters {
   config?: UpdateAgentEngineSessionConfig;
 }
 
+/** Actions are parts of events that are executed by the agent. */
+export declare interface EventActions {
+  /** Optional. Indicates that the event is updating an artifact. key is the filename, value is the version. */
+  artifactDelta?: Record<string, number>;
+  /** Optional. The agent is escalating to a higher level agent. */
+  escalate?: boolean;
+  /** Optional. Will only be set by a tool response indicating tool request euc. Struct key is the function call id since one function call response (from model) could correspond to multiple function calls. Struct value is the required auth config, which can be another struct. */
+  requestedAuthConfigs?: Record<string, unknown>;
+  /** Optional. If true, it won't call model to summarize function response. Only used for function_response event. */
+  skipSummarization?: boolean;
+  /** Optional. Indicates that the event is updating the state with the given delta. */
+  stateDelta?: Record<string, unknown>;
+  /** Optional. If set, the event transfers to the specified agent. */
+  transferAgent?: string;
+}
+
+/** Metadata relating to a LLM response event. */
+export declare interface EventMetadata {
+  /** Optional. Metadata returned to client when grounding is enabled. */
+  groundingMetadata?: genaiTypes.GroundingMetadata;
+  /** Optional. The branch of the event. The format is like agent_1.agent_2.agent_3, where agent_1 is the parent of agent_2, and agent_2 is the parent of agent_3. Branch is used when multiple child agents shouldn't see their siblings' conversation history. */
+  branch?: string;
+  /** The custom metadata of the LlmResponse. */
+  customMetadata?: Record<string, unknown>;
+  /** Optional. Flag indicating that LLM was interrupted when generating the content. Usually it's due to user interruption during a bidi streaming. */
+  interrupted?: boolean;
+  /** Optional. Set of ids of the long running function calls. Agent client will know from this field about which function call is long running. Only valid for function call event. */
+  longRunningToolIds?: string[];
+  /** Optional. Indicates whether the text content is part of a unfinished text stream. Only used for streaming mode and when the content is plain text. */
+  partial?: boolean;
+  /** Optional. Indicates whether the response from the model is complete. Only used for streaming mode. */
+  turnComplete?: boolean;
+}
+
+/** Config for appending agent engine session event. */
+export declare interface AppendAgentEngineSessionEventConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** The content of the session event. */
+  content?: genaiTypes.Content;
+  /** Actions are parts of events that are related to the session event. */
+  actions?: EventActions;
+  /** The error code of the session event. */
+  errorCode?: string;
+  /** The error message of the session event. */
+  errorMessage?: string;
+  /** Metadata relating to the session event. */
+  eventMetadata?: EventMetadata;
+}
+
+/** Parameters for appending agent engines. */
+export declare interface AppendAgentEngineSessionEventRequestParameters {
+  /** Name of the agent engine session. */
+  name: string;
+  /** Author of the agent engine session event. */
+  author: string;
+  /** Invocation ID of the agent engine. */
+  invocationId: string;
+  /** Timestamp indicating when the event was created. */
+  timestamp: string;
+  config?: AppendAgentEngineSessionEventConfig;
+}
+
+/** Response for appending agent engine session event. */
+export class AppendAgentEngineSessionEventResponse {}
+
+/** Config for listing agent engine session events. */
+export declare interface ListAgentEngineSessionEventsConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  pageSize?: number;
+  pageToken?: string;
+  /** An expression for filtering the results of the request.
+      For field names both snake_case and camelCase are supported. */
+  filter?: string;
+}
+
+/** Parameters for listing agent engine session events. */
+export declare interface ListAgentEngineSessionEventsRequestParameters {
+  /** Name of the agent engine session. */
+  name: string;
+  config?: ListAgentEngineSessionEventsConfig;
+}
+
+/** A session event. */
+export declare interface SessionEvent {
+  /** Optional. Content of the event provided by the author. */
+  content?: genaiTypes.Content;
+  /** Optional. Actions executed by the agent. */
+  actions?: EventActions;
+  /** Required. The name of the agent that sent the event, or user. */
+  author?: string;
+  /** Optional. Error code if the response is an error. Code varies by model. */
+  errorCode?: string;
+  /** Optional. Error message if the response is an error. */
+  errorMessage?: string;
+  /** Optional. Metadata relating to this event. */
+  eventMetadata?: EventMetadata;
+  /** Required. The invocation id of the event, multiple events can have the same invocation id. */
+  invocationId?: string;
+  /** Identifier. The resource name of the event. Format:`projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/sessions/{session}/events/{event}`. */
+  name?: string;
+  /** Required. Timestamp when the event was created on client side. */
+  timestamp?: string;
+}
+
+/** Response for listing agent engine session events. */
+export class ListAgentEngineSessionEventsResponse {
+  /** Used to retain the full HTTP response. */
+  sdkHttpResponse?: genaiTypes.HttpResponse;
+  nextPageToken?: string;
+  /** List of session events. */
+  sessionEvents?: SessionEvent[];
+}
+
 /** An agent engine instance. */
 export declare interface AgentEngine {
   /** The underlying API client. */

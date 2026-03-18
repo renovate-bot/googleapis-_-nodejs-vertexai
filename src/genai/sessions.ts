@@ -17,11 +17,15 @@ import {
   NodeUploader,
 } from '@google/genai/vertex_internal';
 import * as converters from './converters/_sessions_converters.js';
+import {SessionEvents} from './sessionevents.js';
 import * as types from './types.js';
 
 export class Sessions extends BaseModule {
+  public readonly events: SessionEvents;
+
   constructor(private readonly apiClient: ApiClient) {
     super();
+    this.events = new SessionEvents(apiClient);
   }
 
   private async createInternal(
