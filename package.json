@@ -51,5 +51,9 @@
     "linkinator": "^4.0.0",
     "typescript": "~5.2.0",
     "nyc": "^15.1.0"
-  }
+  },
+  "files": [
+    "build/src",
+    "!build/src/**/*.map"
+  ]
 }
