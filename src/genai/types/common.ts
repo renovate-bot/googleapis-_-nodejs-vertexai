@@ -1289,6 +1289,93 @@ export declare interface AgentEngineConfig {
   agentConfigSource?: ReasoningEngineSpecSourceCodeSpecAgentConfigSource;
 }
 
+/** Config for checking a query job on an agent engine. */
+export declare interface RunQueryJobAgentEngineConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** The query to send to the agent engine. */
+  query?: string;
+  /** The GCS bucket to use for the query. */
+  gcsBucket?: string;
+}
+
+/** Result of running a query job. */
+export declare interface RunQueryJobResult {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** Name of the agent engine operation to later check for status. */
+  jobName?: string;
+  /** The GCS URI of the input file. */
+  inputGcsUri?: string;
+  /** The GCS URI of the output file. */
+  outputGcsUri?: string;
+}
+
+/** Config for async querying agent engines. */
+export declare interface CheckQueryJobAgentEngineConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** Whether to retrieve the results of the query job. */
+  retrieveResult?: boolean;
+}
+
+/** Result of checking a query job. */
+export declare interface CheckQueryJobResult {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** Name of the agent engine operation. */
+  operationName?: string;
+  /** The GCS URI of the output file. */
+  outputGcsUri?: string;
+  /** Status of the operation. */
+  status?: string;
+  /** JSON result of the operation. */
+  result?: string;
+}
+
+/** Response from LRO. */
+export class CheckQueryJobResponse {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** The GCS URI of the output file. */
+  outputGcsUri?: string;
+}
+
 /** A linked resource attached to the application by the user. */
 export declare interface SchemaPromptSpecAppBuilderDataLinkedResource {
   /** A user-friendly name for the data source shown in the UI. */
