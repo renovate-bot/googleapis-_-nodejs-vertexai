@@ -1328,6 +1328,10 @@ export declare interface EventMetadata {
   partial?: boolean;
   /** Optional. Indicates whether the response from the model is complete. Only used for streaming mode. */
   turnComplete?: boolean;
+  /** Optional. Audio transcription of user input. */
+  inputTranscription?: genaiTypes.Transcription;
+  /** Optional. Audio transcription of model output. */
+  outputTranscription?: genaiTypes.Transcription;
 }
 
 /** Config for appending agent engine session event. */
