@@ -5,7 +5,8 @@
   "packages": {
     ".": {
       "extra-files": [
-        "src/util/constants.ts"
+        "src/util/constants.ts",
+        "src/genai/client.ts"
       ]
     }
   }

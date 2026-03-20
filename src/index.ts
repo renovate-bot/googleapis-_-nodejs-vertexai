@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+export {Client} from './genai/client';
 export {VertexAI} from './vertex_ai';
 export * from './types';
 export * from './models';
