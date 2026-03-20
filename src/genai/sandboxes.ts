@@ -16,33 +16,26 @@ import {
   NodeDownloader,
   NodeUploader,
 } from '@google/genai/vertex_internal';
-import * as converters from './converters/_agentengines_converters.js';
-import {Sandboxes} from './sandboxes.js';
-import {Sessions} from './sessions.js';
+import * as converters from './converters/_sandboxes_converters.js';
 import * as types from './types.js';
 
-export class AgentEngines extends BaseModule {
-  public readonly sessions: Sessions;
-  public readonly sandboxes: Sandboxes;
-
+export class Sandboxes extends BaseModule {
   constructor(private readonly apiClient: ApiClient) {
     super();
-    this.sessions = new Sessions(apiClient);
-    this.sandboxes = new Sandboxes(apiClient);
   }
 
   private async createInternal(
-    params: types.CreateAgentEngineRequestParameters,
-  ): Promise<types.AgentEngineOperation> {
-    let response: Promise<types.AgentEngineOperation>;
+    params: types.CreateAgentEngineSandboxRequestParameters,
+  ): Promise<types.AgentEngineSandboxOperation> {
+    let response: Promise<types.AgentEngineSandboxOperation>;
 
     let path: string = '';
     let queryParams: Record<string, string> = {};
     if (this.apiClient.isVertexAI()) {
       const body =
-        converters.createAgentEngineRequestParametersToVertex(params);
+        converters.createAgentEngineSandboxRequestParametersToVertex(params);
       path = common.formatMap(
-        'reasoningEngines',
+        '{name}/sandboxEnvironments',
         body['_url'] as Record<string, unknown>,
       );
       queryParams = body['_query'] as Record<string, string>;
@@ -61,10 +54,10 @@ export class AgentEngines extends BaseModule {
         })
         .then((httpResponse) => {
           return httpResponse.json();
-        }) as Promise<types.AgentEngineOperation>;
+        }) as Promise<types.AgentEngineSandboxOperation>;
 
       return response.then((resp) => {
-        return resp as types.AgentEngineOperation;
+        return resp as types.AgentEngineSandboxOperation;
       });
     } else {
       throw new Error('This method is only supported by the Vertex AI.');
@@ -72,15 +65,15 @@ export class AgentEngines extends BaseModule {
   }
 
   private async deleteInternal(
-    params: types.DeleteAgentEngineRequestParameters,
-  ): Promise<types.DeleteAgentEngineOperation> {
-    let response: Promise<types.DeleteAgentEngineOperation>;
+    params: types.DeleteAgentEngineSandboxRequestParameters,
+  ): Promise<types.DeleteAgentEngineSandboxOperation> {
+    let response: Promise<types.DeleteAgentEngineSandboxOperation>;
 
     let path: string = '';
     let queryParams: Record<string, string> = {};
     if (this.apiClient.isVertexAI()) {
       const body =
-        converters.deleteAgentEngineRequestParametersToVertex(params);
+        converters.deleteAgentEngineSandboxRequestParametersToVertex(params);
       path = common.formatMap(
         '{name}',
         body['_url'] as Record<string, unknown>,
@@ -101,10 +94,54 @@ export class AgentEngines extends BaseModule {
         })
         .then((httpResponse) => {
           return httpResponse.json();
-        }) as Promise<types.DeleteAgentEngineOperation>;
+        }) as Promise<types.DeleteAgentEngineSandboxOperation>;
 
       return response.then((resp) => {
-        return resp as types.DeleteAgentEngineOperation;
+        return resp as types.DeleteAgentEngineSandboxOperation;
+      });
+    } else {
+      throw new Error('This method is only supported by the Vertex AI.');
+    }
+  }
+
+  private async executeCodeInternal(
+    params: types.ExecuteCodeAgentEngineSandboxRequestParameters,
+  ): Promise<types.ExecuteSandboxEnvironmentResponse> {
+    let response: Promise<types.ExecuteSandboxEnvironmentResponse>;
+
+    let path: string = '';
+    let queryParams: Record<string, string> = {};
+    if (this.apiClient.isVertexAI()) {
+      const body =
+        converters.executeCodeAgentEngineSandboxRequestParametersToVertex(
+          params,
+        );
+      path = common.formatMap(
+        '{name}/:execute',
+        body['_url'] as Record<string, unknown>,
+      );
+      queryParams = body['_query'] as Record<string, string>;
+      delete body['_url'];
+      delete body['_query'];
+      delete body['config'];
+
+      response = this.apiClient
+        .request({
+          path: path,
+          queryParams: queryParams,
+          body: JSON.stringify(body),
+          httpMethod: 'POST',
+          httpOptions: params.config?.httpOptions,
+          abortSignal: params.config?.abortSignal,
+        })
+        .then((httpResponse) => {
+          return httpResponse.json();
+        }) as Promise<types.ExecuteSandboxEnvironmentResponse>;
+
+      return response.then((resp) => {
+        const typedResp = new types.ExecuteSandboxEnvironmentResponse();
+        Object.assign(typedResp, resp);
+        return typedResp;
       });
     } else {
       throw new Error('This method is only supported by the Vertex AI.');
@@ -112,14 +149,15 @@ export class AgentEngines extends BaseModule {
   }
 
   private async getInternal(
-    params: types.GetAgentEngineRequestParameters,
-  ): Promise<types.ReasoningEngine> {
-    let response: Promise<types.ReasoningEngine>;
+    params: types.GetAgentEngineSandboxRequestParameters,
+  ): Promise<types.SandboxEnvironment> {
+    let response: Promise<types.SandboxEnvironment>;
 
     let path: string = '';
     let queryParams: Record<string, string> = {};
     if (this.apiClient.isVertexAI()) {
-      const body = converters.getAgentEngineRequestParametersToVertex(params);
+      const body =
+        converters.getAgentEngineSandboxRequestParametersToVertex(params);
       path = common.formatMap(
         '{name}',
         body['_url'] as Record<string, unknown>,
@@ -140,10 +178,10 @@ export class AgentEngines extends BaseModule {
         })
         .then((httpResponse) => {
           return httpResponse.json();
-        }) as Promise<types.ReasoningEngine>;
+        }) as Promise<types.SandboxEnvironment>;
 
       return response.then((resp) => {
-        return resp as types.ReasoningEngine;
+        return resp as types.SandboxEnvironment;
       });
     } else {
       throw new Error('This method is only supported by the Vertex AI.');
@@ -151,16 +189,17 @@ export class AgentEngines extends BaseModule {
   }
 
   private async listInternal(
-    params: types.ListAgentEngineRequestParameters,
-  ): Promise<types.ListReasoningEnginesResponse> {
-    let response: Promise<types.ListReasoningEnginesResponse>;
+    params: types.ListAgentEngineSandboxesRequestParameters,
+  ): Promise<types.ListAgentEngineSandboxesResponse> {
+    let response: Promise<types.ListAgentEngineSandboxesResponse>;
 
     let path: string = '';
     let queryParams: Record<string, string> = {};
     if (this.apiClient.isVertexAI()) {
-      const body = converters.listAgentEngineRequestParametersToVertex(params);
+      const body =
+        converters.listAgentEngineSandboxesRequestParametersToVertex(params);
       path = common.formatMap(
-        'reasoningEngines',
+        '{name}/sandboxEnvironments',
         body['_url'] as Record<string, unknown>,
       );
       queryParams = body['_query'] as Record<string, string>;
@@ -179,10 +218,10 @@ export class AgentEngines extends BaseModule {
         })
         .then((httpResponse) => {
           return httpResponse.json();
-        }) as Promise<types.ListReasoningEnginesResponse>;
+        }) as Promise<types.ListAgentEngineSandboxesResponse>;
 
       return response.then((resp) => {
-        const typedResp = new types.ListReasoningEnginesResponse();
+        const typedResp = new types.ListAgentEngineSandboxesResponse();
         Object.assign(typedResp, resp);
         return typedResp;
       });
@@ -191,15 +230,16 @@ export class AgentEngines extends BaseModule {
     }
   }
 
-  private async getAgentOperationInternal(
-    params: types.GetAgentEngineOperationParameters,
-  ): Promise<types.AgentEngineOperation> {
-    let response: Promise<types.AgentEngineOperation>;
+  private async getSandboxOperationInternal(
+    params: types.GetAgentEngineSandboxOperationParameters,
+  ): Promise<types.AgentEngineSandboxOperation> {
+    let response: Promise<types.AgentEngineSandboxOperation>;
 
     let path: string = '';
     let queryParams: Record<string, string> = {};
     if (this.apiClient.isVertexAI()) {
-      const body = converters.getAgentEngineOperationParametersToVertex(params);
+      const body =
+        converters.getAgentEngineSandboxOperationParametersToVertex(params);
       path = common.formatMap(
         '{operationName}',
         body['_url'] as Record<string, unknown>,
@@ -220,91 +260,10 @@ export class AgentEngines extends BaseModule {
         })
         .then((httpResponse) => {
           return httpResponse.json();
-        }) as Promise<types.AgentEngineOperation>;
+        }) as Promise<types.AgentEngineSandboxOperation>;
 
       return response.then((resp) => {
-        return resp as types.AgentEngineOperation;
-      });
-    } else {
-      throw new Error('This method is only supported by the Vertex AI.');
-    }
-  }
-
-  private async queryInternal(
-    params: types.QueryAgentEngineRequestParameters,
-  ): Promise<types.QueryReasoningEngineResponse> {
-    let response: Promise<types.QueryReasoningEngineResponse>;
-
-    let path: string = '';
-    let queryParams: Record<string, string> = {};
-    if (this.apiClient.isVertexAI()) {
-      const body = converters.queryAgentEngineRequestParametersToVertex(params);
-      path = common.formatMap(
-        '{name}:query',
-        body['_url'] as Record<string, unknown>,
-      );
-      queryParams = body['_query'] as Record<string, string>;
-      delete body['_url'];
-      delete body['_query'];
-      delete body['config'];
-
-      response = this.apiClient
-        .request({
-          path: path,
-          queryParams: queryParams,
-          body: JSON.stringify(body),
-          httpMethod: 'POST',
-          httpOptions: params.config?.httpOptions,
-          abortSignal: params.config?.abortSignal,
-        })
-        .then((httpResponse) => {
-          return httpResponse.json();
-        }) as Promise<types.QueryReasoningEngineResponse>;
-
-      return response.then((resp) => {
-        const typedResp = new types.QueryReasoningEngineResponse();
-        Object.assign(typedResp, resp);
-        return typedResp;
-      });
-    } else {
-      throw new Error('This method is only supported by the Vertex AI.');
-    }
-  }
-
-  private async updateInternal(
-    params: types.UpdateAgentEngineRequestParameters,
-  ): Promise<types.AgentEngineOperation> {
-    let response: Promise<types.AgentEngineOperation>;
-
-    let path: string = '';
-    let queryParams: Record<string, string> = {};
-    if (this.apiClient.isVertexAI()) {
-      const body =
-        converters.updateAgentEngineRequestParametersToVertex(params);
-      path = common.formatMap(
-        '{name}',
-        body['_url'] as Record<string, unknown>,
-      );
-      queryParams = body['_query'] as Record<string, string>;
-      delete body['_url'];
-      delete body['_query'];
-      delete body['config'];
-
-      response = this.apiClient
-        .request({
-          path: path,
-          queryParams: queryParams,
-          body: JSON.stringify(body),
-          httpMethod: 'PATCH',
-          httpOptions: params.config?.httpOptions,
-          abortSignal: params.config?.abortSignal,
-        })
-        .then((httpResponse) => {
-          return httpResponse.json();
-        }) as Promise<types.AgentEngineOperation>;
-
-      return response.then((resp) => {
-        return resp as types.AgentEngineOperation;
+        return resp as types.AgentEngineSandboxOperation;
       });
     } else {
       throw new Error('This method is only supported by the Vertex AI.');

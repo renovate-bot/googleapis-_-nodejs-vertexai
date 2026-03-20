@@ -66,6 +66,62 @@ export enum ManagedTopicEnum {
   EXPLICIT_INSTRUCTIONS = 'EXPLICIT_INSTRUCTIONS',
 }
 
+/** The coding language supported in this environment. */
+export enum Language {
+  /**
+   * The default value. This value is unused.
+   */
+  LANGUAGE_UNSPECIFIED = 'LANGUAGE_UNSPECIFIED',
+  /**
+   * The coding language is Python.
+   */
+  LANGUAGE_PYTHON = 'LANGUAGE_PYTHON',
+  /**
+   * The coding language is JavaScript.
+   */
+  LANGUAGE_JAVASCRIPT = 'LANGUAGE_JAVASCRIPT',
+}
+
+/** The machine config of the code execution environment. */
+export enum MachineConfig {
+  /**
+   * The default value: milligcu 2000, memory 1.5Gib
+   */
+  MACHINE_CONFIG_UNSPECIFIED = 'MACHINE_CONFIG_UNSPECIFIED',
+  /**
+   * The default value: milligcu 4000, memory 4 Gib
+   */
+  MACHINE_CONFIG_VCPU4_RAM4GIB = 'MACHINE_CONFIG_VCPU4_RAM4GIB',
+}
+
+/** Output only. The runtime state of the SandboxEnvironment. */
+export enum State {
+  /**
+   * The default value. This value is unused.
+   */
+  STATE_UNSPECIFIED = 'STATE_UNSPECIFIED',
+  /**
+   * Runtime resources are being allocated for the sandbox environment.
+   */
+  STATE_PROVISIONING = 'STATE_PROVISIONING',
+  /**
+   * Sandbox runtime is ready for serving.
+   */
+  STATE_RUNNING = 'STATE_RUNNING',
+  /**
+   * Sandbox runtime is halted, performing tear down tasks.
+   */
+  STATE_DEPROVISIONING = 'STATE_DEPROVISIONING',
+  /**
+   * Sandbox has terminated with underlying runtime failure.
+   */
+  STATE_TERMINATED = 'STATE_TERMINATED',
+  /**
+   * Sandbox runtime has been deleted.
+   */
+  STATE_DELETED = 'STATE_DELETED',
+}
+
 /** Framework used to build the application. */
 export enum Framework {
   /**
@@ -798,6 +854,241 @@ export declare interface UpdateAgentEngineRequestParameters {
   /** Name of the agent engine. */
   name: string;
   config?: UpdateAgentEngineConfig;
+}
+
+/** The code execution environment with customized settings. */
+export declare interface SandboxEnvironmentSpecCodeExecutionEnvironment {
+  /** The coding language supported in this environment. */
+  codeLanguage?: Language;
+  /** The machine config of the code execution environment. */
+  machineConfig?: MachineConfig;
+}
+
+/** The computer use environment with customized settings. */
+export declare interface SandboxEnvironmentSpecComputerUseEnvironment {}
+
+/** The specification of a sandbox environment. */
+export declare interface SandboxEnvironmentSpec {
+  /** Optional. The code execution environment. */
+  codeExecutionEnvironment?: SandboxEnvironmentSpecCodeExecutionEnvironment;
+  /** Optional. The computer use environment. */
+  computerUseEnvironment?: SandboxEnvironmentSpecComputerUseEnvironment;
+}
+
+/** Config for creating a Sandbox. */
+export declare interface CreateAgentEngineSandboxConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** The display name of the sandbox. */
+  displayName?: string;
+  /** The description of the sandbox. */
+  description?: string;
+  /** Waits for the operation to complete before returning. */
+  waitForCompletion?: boolean;
+  /** The TTL for this resource. The expiration time is computed: now + TTL. */
+  ttl?: string;
+}
+
+/** Parameters for creating Agent Engine Sandboxes. */
+export declare interface CreateAgentEngineSandboxRequestParameters {
+  /** Name of the agent engine to create the sandbox under. */
+  name: string;
+  /** The specification of the sandbox. */
+  spec?: SandboxEnvironmentSpec;
+  config?: CreateAgentEngineSandboxConfig;
+}
+
+/** The connection information of the SandboxEnvironment. */
+export declare interface SandboxEnvironmentConnectionInfo {
+  /** Output only. The hostname of the load balancer. */
+  loadBalancerHostname?: string;
+  /** Output only. The IP address of the load balancer. */
+  loadBalancerIp?: string;
+  /** Output only. The internal IP address of the SandboxEnvironment. */
+  sandboxInternalIp?: string;
+}
+
+/** A sandbox environment. */
+export declare interface SandboxEnvironment {
+  /** Expiration time of the sandbox environment.
+   */
+  expireTime?: string;
+  /** Output only. The connection information of the SandboxEnvironment. */
+  connectionInfo?: SandboxEnvironmentConnectionInfo;
+  /** Output only. The timestamp when this SandboxEnvironment was created. */
+  createTime?: string;
+  /** Required. The display name of the SandboxEnvironment. */
+  displayName?: string;
+  /** Identifier. The name of the SandboxEnvironment. */
+  name?: string;
+  /** Optional. The configuration of the SandboxEnvironment. */
+  spec?: SandboxEnvironmentSpec;
+  /** Output only. The runtime state of the SandboxEnvironment. */
+  state?: State;
+  /** Optional. Input only. The TTL for the sandbox environment. The expiration time is computed: now + TTL. */
+  ttl?: string;
+  /** Output only. The timestamp when this SandboxEnvironment was most recently updated. */
+  updateTime?: string;
+}
+
+/** Operation that has an agent engine sandbox as a response. */
+export declare interface AgentEngineSandboxOperation {
+  /** The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the `name` should be a resource name ending with `operations/{unique_id}`. */
+  name?: string;
+  /** Service-specific metadata associated with the operation. It typically contains progress information and common metadata such as create time. Some services might not provide such metadata.  Any method that returns a long-running operation should document the metadata type, if any. */
+  metadata?: Record<string, unknown>;
+  /** If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available. */
+  done?: boolean;
+  /** The error result of the operation in case of failure or cancellation. */
+  error?: Record<string, unknown>;
+  /** The Agent Engine Sandbox. */
+  response?: SandboxEnvironment;
+}
+
+/** Config for deleting an Agent Engine Sandbox. */
+export declare interface DeleteAgentEngineSandboxConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+}
+
+/** Parameters for deleting agent engines. */
+export declare interface DeleteAgentEngineSandboxRequestParameters {
+  /** Name of the agent engine sandbox to delete. */
+  name: string;
+  config?: DeleteAgentEngineSandboxConfig;
+}
+
+/** Operation for deleting agent engines. */
+export declare interface DeleteAgentEngineSandboxOperation {
+  /** The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the `name` should be a resource name ending with `operations/{unique_id}`. */
+  name?: string;
+  /** Service-specific metadata associated with the operation. It typically contains progress information and common metadata such as create time. Some services might not provide such metadata.  Any method that returns a long-running operation should document the metadata type, if any. */
+  metadata?: Record<string, unknown>;
+  /** If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available. */
+  done?: boolean;
+  /** The error result of the operation in case of failure or cancellation. */
+  error?: Record<string, unknown>;
+}
+
+/** Metadata for a chunk. */
+export declare interface Metadata {
+  /** Optional. Attributes attached to the data. The keys have semantic conventions and the consumers of the attributes should know how to deserialize the value bytes based on the keys. */
+  attributes?: Record<string, string>;
+}
+
+/** A chunk of data. */
+export declare interface Chunk {
+  /** Required. The data in the chunk.
+   * @remarks Encoded as base64 string. */
+  data?: string;
+  /** Optional. Metadata that is associated with the data in the payload. */
+  metadata?: Metadata;
+  /** Required. Mime type of the chunk data. See https://www.iana.org/assignments/media-types/media-types.xhtml for the full list. */
+  mimeType?: string;
+}
+
+/** Config for executing code in an Agent Engine sandbox. */
+export declare interface ExecuteCodeAgentEngineSandboxConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+}
+
+/** Parameters for executing code in an agent engine sandbox. */
+export declare interface ExecuteCodeAgentEngineSandboxRequestParameters {
+  /** Name of the agent engine sandbox to execute code in. */
+  name: string;
+  /** Inputs to the code execution. */
+  inputs?: Chunk[];
+  config?: ExecuteCodeAgentEngineSandboxConfig;
+}
+
+/** The response for executing a sandbox environment. */
+export class ExecuteSandboxEnvironmentResponse {
+  /** The outputs from the sandbox environment. */
+  outputs?: Chunk[];
+}
+
+/** Config for getting an Agent Engine Memory. */
+export declare interface GetAgentEngineSandboxConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+}
+
+/** Parameters for getting an agent engine sandbox. */
+export declare interface GetAgentEngineSandboxRequestParameters {
+  /** Name of the agent engine sandbox. */
+  name: string;
+  config?: GetAgentEngineSandboxConfig;
+}
+
+/** Config for listing agent engine sandboxes. */
+export declare interface ListAgentEngineSandboxesConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  pageSize?: number;
+  pageToken?: string;
+  /** An expression for filtering the results of the request.
+      For field names both snake_case and camelCase are supported. */
+  filter?: string;
+}
+
+/** Parameters for listing agent engine sandboxes. */
+export declare interface ListAgentEngineSandboxesRequestParameters {
+  /** Name of the agent engine. */
+  name: string;
+  config?: ListAgentEngineSandboxesConfig;
+}
+
+/** Response for listing agent engine sandboxes. */
+export class ListAgentEngineSandboxesResponse {
+  /** Used to retain the full HTTP response. */
+  sdkHttpResponse?: genaiTypes.HttpResponse;
+  nextPageToken?: string;
+  /** List of agent engine sandboxes. */
+  sandboxEnvironments?: SandboxEnvironment[];
+}
+
+/** Parameters for getting an operation with a sandbox as a response. */
+export declare interface GetAgentEngineSandboxOperationParameters {
+  /** The server-assigned name for the operation. */
+  operationName: string;
+  /** Used to override the default configuration. */
+  config?: GetAgentEngineOperationConfig;
 }
 
 /** Config for creating a Session. */
