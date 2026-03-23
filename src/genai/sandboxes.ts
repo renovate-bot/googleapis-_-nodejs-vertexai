@@ -24,7 +24,7 @@ export class Sandboxes extends BaseModule {
     super();
   }
 
-  private async createInternal(
+  async createInternal(
     params: types.CreateAgentEngineSandboxRequestParameters,
   ): Promise<types.AgentEngineSandboxOperation> {
     let response: Promise<types.AgentEngineSandboxOperation>;
@@ -64,7 +64,7 @@ export class Sandboxes extends BaseModule {
     }
   }
 
-  private async deleteInternal(
+  async deleteInternal(
     params: types.DeleteAgentEngineSandboxRequestParameters,
   ): Promise<types.DeleteAgentEngineSandboxOperation> {
     let response: Promise<types.DeleteAgentEngineSandboxOperation>;
@@ -104,7 +104,7 @@ export class Sandboxes extends BaseModule {
     }
   }
 
-  private async executeCodeInternal(
+  async executeCodeInternal(
     params: types.ExecuteCodeAgentEngineSandboxRequestParameters,
   ): Promise<types.ExecuteSandboxEnvironmentResponse> {
     let response: Promise<types.ExecuteSandboxEnvironmentResponse>;
@@ -148,7 +148,7 @@ export class Sandboxes extends BaseModule {
     }
   }
 
-  private async getInternal(
+  async getInternal(
     params: types.GetAgentEngineSandboxRequestParameters,
   ): Promise<types.SandboxEnvironment> {
     let response: Promise<types.SandboxEnvironment>;
@@ -188,7 +188,7 @@ export class Sandboxes extends BaseModule {
     }
   }
 
-  private async listInternal(
+  async listInternal(
     params: types.ListAgentEngineSandboxesRequestParameters,
   ): Promise<types.ListAgentEngineSandboxesResponse> {
     let response: Promise<types.ListAgentEngineSandboxesResponse>;
@@ -230,7 +230,7 @@ export class Sandboxes extends BaseModule {
     }
   }
 
-  private async getSandboxOperationInternal(
+  async getSandboxOperationInternal(
     params: types.GetAgentEngineSandboxOperationParameters,
   ): Promise<types.AgentEngineSandboxOperation> {
     let response: Promise<types.AgentEngineSandboxOperation>;

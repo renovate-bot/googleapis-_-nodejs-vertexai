@@ -24,7 +24,7 @@ describe('SessionEvents', () => {
         'ae_session_events_append/test_append_session_event.vertex.json');
 
     const createEventOp =
-        await (client.agentEnginesInternal.sessions.events as any).append({
+        await client.agentEnginesInternal.sessions.events.append({
           name:
               'reasoningEngines/2886612747586371584/sessions/6922431337672474624',
           author: 'test-user-123',
@@ -39,14 +39,14 @@ describe('SessionEvents', () => {
         'ae_session_events_private_list/test_private_list_session_events.vertex.json');
 
     const listSessionEventsResponse =
-        await (client.agentEnginesInternal.sessions.events as any).listInternal({
+        await client.agentEnginesInternal.sessions.events.listInternal({
           name:
               'reasoningEngines/2886612747586371584/sessions/6922431337672474624',
         });
     client.verifyInteraction(0, fetchSpy.calls.argsFor(0));
     expect(listSessionEventsResponse.sessionEvents).toBeDefined();
-    expect(listSessionEventsResponse.sessionEvents.length).toBeGreaterThan(0);
-    expect(listSessionEventsResponse.sessionEvents[0].name)
+    expect(listSessionEventsResponse.sessionEvents!.length).toBeGreaterThan(0);
+    expect(listSessionEventsResponse.sessionEvents![0].name)
         .toContain('events/2517327301947949056');
     client.verifyAllInteractions();
   });

@@ -31,7 +31,7 @@ export class AgentEngines extends BaseModule {
     this.sandboxes = new Sandboxes(apiClient);
   }
 
-  private async createInternal(
+  async createInternal(
     params: types.CreateAgentEngineRequestParameters,
   ): Promise<types.AgentEngineOperation> {
     let response: Promise<types.AgentEngineOperation>;
@@ -71,7 +71,7 @@ export class AgentEngines extends BaseModule {
     }
   }
 
-  private async deleteInternal(
+  async deleteInternal(
     params: types.DeleteAgentEngineRequestParameters,
   ): Promise<types.DeleteAgentEngineOperation> {
     let response: Promise<types.DeleteAgentEngineOperation>;
@@ -111,7 +111,7 @@ export class AgentEngines extends BaseModule {
     }
   }
 
-  private async getInternal(
+  async getInternal(
     params: types.GetAgentEngineRequestParameters,
   ): Promise<types.ReasoningEngine> {
     let response: Promise<types.ReasoningEngine>;
@@ -150,7 +150,7 @@ export class AgentEngines extends BaseModule {
     }
   }
 
-  private async listInternal(
+  async listInternal(
     params: types.ListAgentEngineRequestParameters,
   ): Promise<types.ListReasoningEnginesResponse> {
     let response: Promise<types.ListReasoningEnginesResponse>;
@@ -191,7 +191,7 @@ export class AgentEngines extends BaseModule {
     }
   }
 
-  private async getAgentOperationInternal(
+  async getAgentOperationInternal(
     params: types.GetAgentEngineOperationParameters,
   ): Promise<types.AgentEngineOperation> {
     let response: Promise<types.AgentEngineOperation>;
@@ -230,7 +230,7 @@ export class AgentEngines extends BaseModule {
     }
   }
 
-  private async queryInternal(
+  async queryInternal(
     params: types.QueryAgentEngineRequestParameters,
   ): Promise<types.QueryReasoningEngineResponse> {
     let response: Promise<types.QueryReasoningEngineResponse>;
@@ -271,7 +271,7 @@ export class AgentEngines extends BaseModule {
     }
   }
 
-  private async updateInternal(
+  async updateInternal(
     params: types.UpdateAgentEngineRequestParameters,
   ): Promise<types.AgentEngineOperation> {
     let response: Promise<types.AgentEngineOperation>;

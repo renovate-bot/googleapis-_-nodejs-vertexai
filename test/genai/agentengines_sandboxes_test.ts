@@ -8,7 +8,10 @@ import 'jasmine';
 
 import {NodeAuth} from '@google/genai/vertex_internal';
 
+import * as types from '../../src/genai/types.js';
+
 import {ReplayClient} from './_replay_client.js';
+
 describe('AgentEnginesSandboxes', () => {
   let client: ReplayClient;
 
@@ -24,12 +27,12 @@ describe('AgentEnginesSandboxes', () => {
         'ae_sandboxes_private_create/test_private_create.vertex.json');
 
     const createSandboxOp =
-        await (client.agentEnginesInternal.sandboxes as any).createInternal({
+        await client.agentEnginesInternal.sandboxes.createInternal({
           name:
               `projects/964831358985/locations/us-central1/reasoningEngines/2886612747586371584`,
           spec: {
             codeExecutionEnvironment: {
-              machineConfig: 'MACHINE_CONFIG_VCPU4_RAM4GIB',
+              machineConfig: types.MachineConfig.MACHINE_CONFIG_VCPU4_RAM4GIB,
             },
           },
         });
@@ -43,7 +46,7 @@ describe('AgentEnginesSandboxes', () => {
         'ae_sandboxes_private_delete/test_private_delete.vertex.json');
 
     const deleteSandboxOp =
-        await (client.agentEnginesInternal.sandboxes as any).deleteInternal({
+        await client.agentEnginesInternal.sandboxes.deleteInternal({
           name:
               `reasoningEngines/2886612747586371584/sandboxEnvironments/6068475153556176896`,
         });
@@ -66,7 +69,7 @@ with open("test.txt", "r") as input:
         JSON.stringify({code}).replace('{"code":', '{"code": ');
 
     const executeCodeResponse =
-        await (client.agentEnginesInternal.sandboxes as any).executeCodeInternal({
+        await client.agentEnginesInternal.sandboxes.executeCodeInternal({
           name:
               `reasoningEngines/2886612747586371584/sandboxEnvironments/6068475153556176896`,
           inputs: [
@@ -95,10 +98,9 @@ with open("test.txt", "r") as input:
 
     const sandboxName =
         `projects/964831358985/locations/us-central1/reasoningEngines/2886612747586371584/sandboxEnvironments/3186171392039059456`;
-    const sandbox =
-        await (client.agentEnginesInternal.sandboxes as any).getInternal({
-          name: sandboxName,
-        });
+    const sandbox = await client.agentEnginesInternal.sandboxes.getInternal({
+      name: sandboxName,
+    });
     client.verifyInteraction(0, fetchSpy.calls.argsFor(0));
     expect(sandbox.name).toEqual(sandboxName);
     client.verifyAllInteractions();
@@ -109,10 +111,11 @@ with open("test.txt", "r") as input:
 
     const operationName =
         `projects/964831358985/locations/us-central1/operations/4799455193970245632`;
-    const sandbox = await (client.agentEnginesInternal.sandboxes as any)
-                        .getSandboxOperationInternal({
-                          operationName: operationName,
-                        });
+    const sandbox =
+        await client.agentEnginesInternal.sandboxes.getSandboxOperationInternal(
+            {
+              operationName: operationName,
+            });
     client.verifyInteraction(0, fetchSpy.calls.argsFor(0));
     expect(sandbox.name).toEqual(operationName);
     client.verifyAllInteractions();
@@ -123,7 +126,7 @@ with open("test.txt", "r") as input:
 
     const aeName = `reasoningEngines/2886612747586371584`;
     const listSandboxesResponse =
-        await (client.agentEnginesInternal.sandboxes as any).listInternal({
+        await client.agentEnginesInternal.sandboxes.listInternal({
           name: aeName,
         });
     client.verifyInteraction(0, fetchSpy.calls.argsFor(0));

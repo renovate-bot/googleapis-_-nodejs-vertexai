@@ -68,7 +68,7 @@ export class SessionEvents extends BaseModule {
     }
   }
 
-  private async listInternal(
+  async listInternal(
     params: types.ListAgentEngineSessionEventsRequestParameters,
   ): Promise<types.ListAgentEngineSessionEventsResponse> {
     let response: Promise<types.ListAgentEngineSessionEventsResponse>;

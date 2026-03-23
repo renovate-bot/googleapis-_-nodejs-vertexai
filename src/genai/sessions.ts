@@ -28,7 +28,7 @@ export class Sessions extends BaseModule {
     this.events = new SessionEvents(apiClient);
   }
 
-  private async createInternal(
+  async createInternal(
     params: types.CreateAgentEngineSessionRequestParameters,
   ): Promise<types.AgentEngineSessionOperation> {
     let response: Promise<types.AgentEngineSessionOperation>;
@@ -148,7 +148,7 @@ export class Sessions extends BaseModule {
     }
   }
 
-  private async listInternal(
+  async listInternal(
     params: types.ListAgentEngineSessionsRequestParameters,
   ): Promise<types.ListReasoningEnginesSessionsResponse> {
     let response: Promise<types.ListReasoningEnginesSessionsResponse>;
@@ -190,7 +190,7 @@ export class Sessions extends BaseModule {
     }
   }
 
-  private async getSessionOperationInternal(
+  async getSessionOperationInternal(
     params: types.GetAgentEngineSessionOperationParameters,
   ): Promise<types.AgentEngineSessionOperation> {
     let response: Promise<types.AgentEngineSessionOperation>;
@@ -230,7 +230,7 @@ export class Sessions extends BaseModule {
     }
   }
 
-  private async updateInternal(
+  async updateInternal(
     params: types.UpdateAgentEngineSessionRequestParameters,
   ): Promise<types.AgentEngineSessionOperation> {
     let response: Promise<types.AgentEngineSessionOperation>;

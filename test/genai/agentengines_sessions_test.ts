@@ -24,7 +24,7 @@ describe('AgentEnginesSessions', () => {
         'ae_session_private_create/test_private_create_session.vertex.json');
 
     const createSessionOp =
-        await (client.agentEnginesInternal.sessions as any).createInternal({
+        await client.agentEnginesInternal.sessions.createInternal({
           name:
               `projects/964831358985/locations/us-central1/reasoningEngines/2886612747586371584`,
           userId: 'test-user-id',
@@ -39,7 +39,7 @@ describe('AgentEnginesSessions', () => {
         'ae_session_private_update/test_private_update_session.vertex.json');
 
     const updateSessionOp =
-        await (client.agentEnginesInternal.sessions as any).updateInternal({
+        await client.agentEnginesInternal.sessions.updateInternal({
           name:
               `reasoningEngines/2886612747586371584/sessions/3080649749292908544`,
           config: {
@@ -58,11 +58,10 @@ describe('AgentEnginesSessions', () => {
         'ae_session_private_get/test_private_get_session_operation.vertex.json');
 
     const getSessionOp =
-        await (client.agentEnginesInternal.sessions as any)
-            .getSessionOperationInternal({
-              operationName:
-                  `reasoningEngines/2886612747586371584/sessions/3080649749292908544/operations/758783840595476480`
-            });
+        await client.agentEnginesInternal.sessions.getSessionOperationInternal({
+          operationName:
+              `reasoningEngines/2886612747586371584/sessions/3080649749292908544/operations/758783840595476480`
+        });
     client.verifyInteraction(0, fetchSpy.calls.argsFor(0));
 
     expect(getSessionOp.name).toBeDefined();
@@ -73,11 +72,9 @@ describe('AgentEnginesSessions', () => {
     const fetchSpy = client.setupReplay(
         'ae_session_delete/test_delete_session_non_blocking.vertex.json');
 
-    const deleteSessionOp =
-        await (client.agentEnginesInternal.sessions as any).delete({
-          name:
-              `reasoningEngines/2886612747586371584/sessions/8521561049109889024`
-        });
+    const deleteSessionOp = await client.agentEnginesInternal.sessions.delete({
+      name: `reasoningEngines/2886612747586371584/sessions/8521561049109889024`
+    });
     client.verifyInteraction(0, fetchSpy.calls.argsFor(0));
 
     expect(deleteSessionOp.name).toBeDefined();
