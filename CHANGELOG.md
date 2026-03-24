@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.3](https://github.com/googleapis/nodejs-vertexai/compare/v1.10.2...v1.10.3) (2026-03-24)
+
+
+### Miscellaneous Chores
+
+* release 1.10.3 ([6a68cbe](https://github.com/googleapis/nodejs-vertexai/commit/6a68cbe24119a879f963587646fd9d69fecb9fc2))
+
 ## [1.10.2](https://github.com/googleapis/nodejs-vertexai/compare/v1.10.1...v1.10.2) (2026-03-19)
 
 
