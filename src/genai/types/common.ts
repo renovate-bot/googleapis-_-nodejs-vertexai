@@ -216,7 +216,7 @@ export declare interface DnsPeeringConfig {
   targetProject?: string;
 }
 
-/** The PSC interface config. */
+/** Configuration for PSC-I. */
 export declare interface PscInterfaceConfig {
   /** Optional. DNS peering configurations. When specified, Vertex AI will attempt to configure DNS peering zones in the tenant project VPC to resolve the specified domains using the target network's Cloud DNS. The user must grant the dns.peer role to the Vertex AI Service Agent on the target project. */
   dnsPeeringConfigs?: DnsPeeringConfig[];
@@ -311,9 +311,7 @@ export declare interface ReasoningEngineSpecSourceCodeSpecDeveloperConnectSource
   config?: ReasoningEngineSpecSourceCodeSpecDeveloperConnectConfig;
 }
 
-/** The image spec for building an image (within a single build step).
-
-It is based on the config file (i.e. Dockerfile) in the source directory. */
+/** The image spec for building an image (within a single build step), based on the config file (i.e. Dockerfile) in the source directory. */
 export declare interface ReasoningEngineSpecSourceCodeSpecImageSpec {
   /** Optional. Build arguments to be used. They will be passed through --build-arg flags. */
   buildArgs?: Record<string, string>;
@@ -345,6 +343,12 @@ export declare interface ReasoningEngineSpecSourceCodeSpec {
   pythonSpec?: ReasoningEngineSpecSourceCodeSpecPythonSpec;
 }
 
+/** Specification for deploying from a container image. */
+export declare interface ReasoningEngineSpecContainerSpec {
+  /** Required. The Artifact Registry Docker image URI (e.g., us-central1-docker.pkg.dev/my-project/my-repo/my-image:tag) of the container image that is to be run on each worker replica. */
+  imageUri?: string;
+}
+
 /** The specification of an agent engine. */
 export declare interface ReasoningEngineSpec {
   /** Optional. The A2A Agent Card for the agent (if available). It follows the specification at https://a2a-protocol.org/latest/specification/#5-agent-discovery-the-agent-card. */
@@ -365,6 +369,8 @@ export declare interface ReasoningEngineSpec {
   serviceAccount?: string;
   /** Deploy from source code files with a defined entrypoint. */
   sourceCodeSpec?: ReasoningEngineSpecSourceCodeSpec;
+  /** Deploy from a container image with a defined entrypoint and commands. */
+  containerSpec?: ReasoningEngineSpecContainerSpec;
 }
 
 /** The conversation source event for generating memories. */
@@ -483,7 +489,7 @@ export declare interface ReasoningEngineContextSpecMemoryBankConfig {
   ttlConfig?: ReasoningEngineContextSpecMemoryBankConfigTtlConfig;
 }
 
-/** The configuration for agent engine sub-resources to manage context. */
+/** Configuration for how Agent Engine sub-resources should manage context. */
 export declare interface ReasoningEngineContextSpec {
   /** Optional. Specification for a Memory Bank, which manages memories for the Agent Engine. */
   memoryBankConfig?: ReasoningEngineContextSpecMemoryBankConfig;
@@ -2329,6 +2335,8 @@ export declare interface AgentEngineConfig {
   imageSpec?: ReasoningEngineSpecSourceCodeSpecImageSpec;
   /** The agent config source for the Agent Engine. */
   agentConfigSource?: ReasoningEngineSpecSourceCodeSpecAgentConfigSource;
+  /** The container spec for the Agent Engine. */
+  containerSpec?: ReasoningEngineSpecContainerSpec;
 }
 
 /** Config for checking a query job on an agent engine. */
