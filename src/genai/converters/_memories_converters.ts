@@ -79,6 +79,11 @@ export function agentEngineMemoryConfigToVertex(
     common.setValueByPath(parentObject, ['metadata'], fromMetadata);
   }
 
+  const fromMemoryId = common.getValueByPath(fromObject, ['memoryId']);
+  if (parentObject !== undefined && fromMemoryId != null) {
+    common.setValueByPath(parentObject, ['_query', 'memoryId'], fromMemoryId);
+  }
+
   return toObject;
 }
 
@@ -538,6 +543,11 @@ export function updateAgentEngineMemoryConfigToVertex(
   const fromMetadata = common.getValueByPath(fromObject, ['metadata']);
   if (parentObject !== undefined && fromMetadata != null) {
     common.setValueByPath(parentObject, ['metadata'], fromMetadata);
+  }
+
+  const fromMemoryId = common.getValueByPath(fromObject, ['memoryId']);
+  if (parentObject !== undefined && fromMemoryId != null) {
+    common.setValueByPath(parentObject, ['_query', 'memoryId'], fromMemoryId);
   }
 
   const fromUpdateMask = common.getValueByPath(fromObject, ['updateMask']);

@@ -43,6 +43,11 @@ export function appendAgentEngineSessionEventConfigToVertex(
     common.setValueByPath(parentObject, ['eventMetadata'], fromEventMetadata);
   }
 
+  const fromRawEvent = common.getValueByPath(fromObject, ['rawEvent']);
+  if (parentObject !== undefined && fromRawEvent != null) {
+    common.setValueByPath(parentObject, ['rawEvent'], fromRawEvent);
+  }
+
   return toObject;
 }
 
