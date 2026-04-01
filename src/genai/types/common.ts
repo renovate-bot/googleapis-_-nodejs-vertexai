@@ -2356,8 +2356,13 @@ export declare interface RunQueryJobAgentEngineConfig {
   abortSignal?: AbortSignal;
   /** The query to send to the agent engine. */
   query?: string;
-  /** The GCS bucket to use for the query. */
-  gcsBucket?: string;
+  /** The GCS URI to use for the output.
+      If it is a file, the system use this file to store the response.
+      If it represents a directory, the system automatically generate a file
+      for the response.
+      In both cases, the input query will be stored in the same directory under
+      the same file name prefix as the output file. */
+  outputGcsUri?: string;
 }
 
 /** Result of running a query job. */
