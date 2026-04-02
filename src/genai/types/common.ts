@@ -431,6 +431,12 @@ export declare interface MemoryBankCustomizationConfigMemoryTopic {
   managedMemoryTopic?: MemoryBankCustomizationConfigMemoryTopicManagedMemoryTopic;
 }
 
+/** Represents configuration for customizing how memories are consolidated. */
+export declare interface MemoryBankCustomizationConfigConsolidationConfig {
+  /** Optional. Represents the maximum number of revisions to consider for each candidate memory. If not set, then the default value (1) will be used, which means that only the latest revision will be considered. */
+  revisionsPerCandidateCount?: number;
+}
+
 /** Configuration for organizing memories for a particular scope. */
 export declare interface MemoryBankCustomizationConfig {
   /** Optional. If true, then the memories will be generated in the third person (i.e. "The user generates memories with Memory Bank."). By default, the memories will be generated in the first person (i.e. "I generate memories with Memory Bank.") */
@@ -441,6 +447,8 @@ export declare interface MemoryBankCustomizationConfig {
   memoryTopics?: MemoryBankCustomizationConfigMemoryTopic[];
   /** Optional. The scope keys (i.e. 'user_id') for which to use this config. A request's scope must include all of the provided keys for the config to be used (order does not matter). If empty, then the config will be used for all requests that do not have a more specific config. Only one default config is allowed per Memory Bank. */
   scopeKeys?: string[];
+  /** Optional. Represents configuration for customizing how memories are consolidated together. */
+  consolidationConfig?: MemoryBankCustomizationConfigConsolidationConfig;
 }
 
 /** Configuration for how to generate memories. */
