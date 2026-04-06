@@ -8,8 +8,6 @@
 
 import * as genaiTypes from '@google/genai';
 
-import * as agentEnginesTypes from './agent_engines.js';
-
 /** The identity type to use for the Reasoning Engine. If not specified, the `service_account` field will be used if set, otherwise the default Vertex AI Reasoning Engine Service Agent in the project will be used. */
 export enum IdentityType {
   /**

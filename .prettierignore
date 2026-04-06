@@ -1,5 +1,7 @@
 **/node_modules
 build/
 docs/
-src/genai/
-test/genai/
+test/
+system_test/
+sdk_schema_test/
+src/**/test/

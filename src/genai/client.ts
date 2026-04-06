@@ -1,13 +1,11 @@
-
 /**
  * @license
  * Copyright 2026 Google LLC
  * SPDX-License-Identifier: Apache-2.0
  */
-import {ApiClient, NodeAuth, NodeDownloader, NodeUploader} from '@google/genai/vertex_internal';
+import {ApiClient, NodeAuth, NodeDownloader, NodeUploader,} from '@google/genai/vertex_internal';
 
 import {AgentEngines} from './agentengines';
-import {Sessions} from './sessions';
 
 export const SDK_VERSION = '1.10.4';  // x-release-please-version
 
@@ -20,8 +18,9 @@ export class Client {
   constructor(
       options: {project?: string; location?: string; apiEndpoint?: string;}) {
     const auth = new NodeAuth({
-      googleAuthOptions:
-          {scopes: ['https://www.googleapis.com/auth/cloud-platform']}
+      googleAuthOptions: {
+        scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+      },
     });
 
     const uploader = new NodeUploader();
@@ -36,9 +35,8 @@ export class Client {
       vertexai: true,
       httpOptions: options.apiEndpoint ? {baseUrl: options.apiEndpoint} :
                                          undefined,
-      userAgentExtra: `vertex-genai-modules/${SDK_VERSION}`
+      userAgentExtra: `vertex-genai-modules/${SDK_VERSION}`,
     });
-
 
     this._agentEnginesInternal = new AgentEngines(this.apiClient);
   }
@@ -49,7 +47,8 @@ export class Client {
   public get agentEnginesInternal(): AgentEngines {
     if (!agentEnginesInternalWarned) {
       console.warn(
-          'The agentEnginesInternal implementation is experimental, and may change in future versions.');
+          'The agentEnginesInternal implementation is experimental, and may change in future versions.',
+      );
       agentEnginesInternalWarned = true;
     }
     return this._agentEnginesInternal;
