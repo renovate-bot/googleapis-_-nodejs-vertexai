@@ -194,6 +194,19 @@ export function generateAgentEngineMemoriesConfigToVertex(
     );
   }
 
+  const fromAllowedTopics = common.getValueByPath(fromObject, [
+    'allowedTopics',
+  ]);
+  if (parentObject !== undefined && fromAllowedTopics != null) {
+    let transformedList = fromAllowedTopics;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return item;
+      });
+    }
+    common.setValueByPath(parentObject, ['allowedTopics'], transformedList);
+  }
+
   return toObject;
 }
 

@@ -1208,6 +1208,8 @@ export declare interface GenerateAgentEngineMemoriesConfig {
   metadata?: Record<string, MemoryMetadataValue>;
   /** Optional. The strategy to use when applying metadata to existing memories. */
   metadataMergeStrategy?: MemoryMetadataMergeStrategy;
+  /** Optional. Restricts memory generation to a subset of memory topics. */
+  allowedTopics?: MemoryTopicId[];
 }
 
 /** Parameters for generating agent engine memories. */
