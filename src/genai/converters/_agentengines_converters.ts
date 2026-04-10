@@ -112,6 +112,17 @@ export function createAgentEngineConfigToVertex(
     common.setValueByPath(parentObject, ['pythonVersion'], fromPythonVersion);
   }
 
+  const fromAgentGatewayConfig = common.getValueByPath(fromObject, [
+    'agentGatewayConfig',
+  ]);
+  if (parentObject !== undefined && fromAgentGatewayConfig != null) {
+    common.setValueByPath(
+      parentObject,
+      ['agentGatewayConfig'],
+      fromAgentGatewayConfig,
+    );
+  }
+
   return toObject;
 }
 
@@ -360,6 +371,17 @@ export function updateAgentEngineConfigToVertex(
   ]);
   if (parentObject !== undefined && fromPythonVersion != null) {
     common.setValueByPath(parentObject, ['pythonVersion'], fromPythonVersion);
+  }
+
+  const fromAgentGatewayConfig = common.getValueByPath(fromObject, [
+    'agentGatewayConfig',
+  ]);
+  if (parentObject !== undefined && fromAgentGatewayConfig != null) {
+    common.setValueByPath(
+      parentObject,
+      ['agentGatewayConfig'],
+      fromAgentGatewayConfig,
+    );
   }
 
   const fromUpdateMask = common.getValueByPath(fromObject, ['updateMask']);

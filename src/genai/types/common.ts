@@ -657,6 +657,8 @@ export declare interface CreateAgentEngineConfig {
           subdirectory and the path must be added to `extra_packages`.
        */
   buildOptions?: Record<string, string[]>;
+  /** Agent Gateway configuration for a Reasoning Engine deployment. */
+  agentGatewayConfig?: ReasoningEngineSpecDeploymentSpecAgentGatewayConfig;
 }
 
 /** Parameters for creating agent engines. */
@@ -983,6 +985,8 @@ export declare interface UpdateAgentEngineConfig {
           subdirectory and the path must be added to `extra_packages`.
        */
   buildOptions?: Record<string, string[]>;
+  /** Agent Gateway configuration for a Reasoning Engine deployment. */
+  agentGatewayConfig?: ReasoningEngineSpecDeploymentSpecAgentGatewayConfig;
   /** The update mask to apply. For the `FieldMask` definition, see
       https://protobuf.dev/reference/protobuf/google.protobuf/#field-mask. */
   updateMask?: string;
@@ -2418,6 +2422,8 @@ export declare interface AgentEngineConfig {
   agentConfigSource?: ReasoningEngineSpecSourceCodeSpecAgentConfigSource;
   /** The container spec for the Agent Engine. */
   containerSpec?: ReasoningEngineSpecContainerSpec;
+  /** Agent Gateway configuration for a Reasoning Engine deployment. */
+  agentGatewayConfig?: ReasoningEngineSpecDeploymentSpecAgentGatewayConfig;
 }
 
 /** Config for checking a query job on an agent engine. */
