@@ -276,7 +276,7 @@ export declare interface ReasoningEngineSpecDeploymentSpecAgentGatewayConfig {
 
 /** Specifies the HTTP GET configuration for the probe. */
 export declare interface KeepAliveProbeHttpGet {
-  /** Required. Specifies the path of the HTTP GET request (e.g., `"/is_busy"`). */
+  /** Required. Specifies the path of the HTTP GET request (e.g., "/is_busy"). */
   path?: string;
   /** Optional. Specifies the port number on the container to which the request is sent. */
   port?: number;
@@ -715,6 +715,10 @@ export declare interface CreateAgentEngineConfig {
   buildOptions?: Record<string, string[]>;
   /** Agent Gateway configuration for a Reasoning Engine deployment. */
   agentGatewayConfig?: ReasoningEngineSpecDeploymentSpecAgentGatewayConfig;
+  /** Optional. Specifies the configuration for keep-alive probe.
+      Contains configuration on a specified endpoint that a deployment host
+      should use to keep the container alive based on the probe settings. */
+  keepAliveProbe?: KeepAliveProbe;
 }
 
 /** Parameters for creating agent engines. */
@@ -1043,6 +1047,10 @@ export declare interface UpdateAgentEngineConfig {
   buildOptions?: Record<string, string[]>;
   /** Agent Gateway configuration for a Reasoning Engine deployment. */
   agentGatewayConfig?: ReasoningEngineSpecDeploymentSpecAgentGatewayConfig;
+  /** Optional. Specifies the configuration for keep-alive probe.
+      Contains configuration on a specified endpoint that a deployment host
+      should use to keep the container alive based on the probe settings. */
+  keepAliveProbe?: KeepAliveProbe;
   /** The update mask to apply. For the `FieldMask` definition, see
       https://protobuf.dev/reference/protobuf/google.protobuf/#field-mask. */
   updateMask?: string;
@@ -2610,6 +2618,10 @@ export declare interface AgentEngineConfig {
   containerSpec?: ReasoningEngineSpecContainerSpec;
   /** Agent Gateway configuration for a Reasoning Engine deployment. */
   agentGatewayConfig?: ReasoningEngineSpecDeploymentSpecAgentGatewayConfig;
+  /** Optional. Specifies the configuration for keep-alive probe.
+      Contains configuration on a specified endpoint that a deployment host
+      should use to keep the container alive based on the probe settings. */
+  keepAliveProbe?: KeepAliveProbe;
 }
 
 /** Config for checking a query job on an agent engine. */
