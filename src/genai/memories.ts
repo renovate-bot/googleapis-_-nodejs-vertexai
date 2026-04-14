@@ -180,6 +180,45 @@ export class Memories extends BaseModule {
     }
   }
 
+  async ingestEventsInternal(
+    params: types.IngestEventsRequestParameters,
+  ): Promise<types.MemoryBankIngestEventsOperation> {
+    let response: Promise<types.MemoryBankIngestEventsOperation>;
+
+    let path: string = '';
+    let queryParams: Record<string, string> = {};
+    if (this.apiClient.isVertexAI()) {
+      const body = converters.ingestEventsRequestParametersToVertex(params);
+      path = common.formatMap(
+        '{name}/memories:ingestEvents',
+        body['_url'] as Record<string, unknown>,
+      );
+      queryParams = body['_query'] as Record<string, string>;
+      delete body['_url'];
+      delete body['_query'];
+      delete body['config'];
+
+      response = this.apiClient
+        .request({
+          path: path,
+          queryParams: queryParams,
+          body: JSON.stringify(body),
+          httpMethod: 'POST',
+          httpOptions: params.config?.httpOptions,
+          abortSignal: params.config?.abortSignal,
+        })
+        .then((httpResponse) => {
+          return httpResponse.json();
+        }) as Promise<types.MemoryBankIngestEventsOperation>;
+
+      return response.then((resp) => {
+        return resp as types.MemoryBankIngestEventsOperation;
+      });
+    } else {
+      throw new Error('This method is only supported by the Vertex AI.');
+    }
+  }
+
   async listInternal(
     params: types.ListAgentEngineMemoryRequestParameters,
   ): Promise<types.ListReasoningEnginesMemoriesResponse> {

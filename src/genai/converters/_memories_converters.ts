@@ -317,6 +317,70 @@ export function getAgentEngineMemoryRequestParametersToVertex(
   return toObject;
 }
 
+export function ingestEventsConfigToVertex(
+  fromObject: types.IngestEventsConfig,
+  parentObject: Record<string, unknown>,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromForceFlush = common.getValueByPath(fromObject, ['forceFlush']);
+  if (parentObject !== undefined && fromForceFlush != null) {
+    common.setValueByPath(parentObject, ['forceFlush'], fromForceFlush);
+  }
+
+  return toObject;
+}
+
+export function ingestEventsRequestParametersToVertex(
+  fromObject: types.IngestEventsRequestParameters,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromName = common.getValueByPath(fromObject, ['name']);
+  if (fromName != null) {
+    common.setValueByPath(toObject, ['_url', 'name'], fromName);
+  }
+
+  const fromStreamId = common.getValueByPath(fromObject, ['streamId']);
+  if (fromStreamId != null) {
+    common.setValueByPath(toObject, ['streamId'], fromStreamId);
+  }
+
+  const fromDirectContentsSource = common.getValueByPath(fromObject, [
+    'directContentsSource',
+  ]);
+  if (fromDirectContentsSource != null) {
+    common.setValueByPath(
+      toObject,
+      ['directContentsSource'],
+      fromDirectContentsSource,
+    );
+  }
+
+  const fromScope = common.getValueByPath(fromObject, ['scope']);
+  if (fromScope != null) {
+    common.setValueByPath(toObject, ['scope'], fromScope);
+  }
+
+  const fromGenerationTriggerConfig = common.getValueByPath(fromObject, [
+    'generationTriggerConfig',
+  ]);
+  if (fromGenerationTriggerConfig != null) {
+    common.setValueByPath(
+      toObject,
+      ['generationTriggerConfig'],
+      fromGenerationTriggerConfig,
+    );
+  }
+
+  const fromConfig = common.getValueByPath(fromObject, ['config']);
+  if (fromConfig != null) {
+    ingestEventsConfigToVertex(fromConfig, toObject);
+  }
+
+  return toObject;
+}
+
 export function listAgentEngineMemoryConfigToVertex(
   fromObject: types.ListAgentEngineMemoryConfig,
   parentObject: Record<string, unknown>,

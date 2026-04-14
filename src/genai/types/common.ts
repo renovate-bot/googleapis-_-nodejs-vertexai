@@ -507,10 +507,28 @@ export declare interface MemoryBankCustomizationConfig {
   disableNaturalLanguageMemories?: boolean;
 }
 
+/** Represents the active rule that determines when to flush the buffer. */
+export declare interface MemoryGenerationTriggerConfigGenerationTriggerRule {
+  /** Specifies to trigger generation when the event count reaches this limit. */
+  eventCount?: number;
+  /** Specifies to trigger generation at a fixed interval. The duration must have a minute-level granularity. */
+  fixedInterval?: string;
+  /** Specifies to trigger generation if the stream is inactive for the specified duration after the most recent event. The duration must have a minute-level granularity. */
+  idleDuration?: string;
+}
+
+/** The configuration for triggering memory generation for ingested events. */
+export declare interface MemoryGenerationTriggerConfig {
+  /** Optional. Represents the active rule that determines when to flush the buffer. If not set, then the stream will be force flushed immediately. */
+  generationRule?: MemoryGenerationTriggerConfigGenerationTriggerRule;
+}
+
 /** Configuration for how to generate memories. */
 export declare interface ReasoningEngineContextSpecMemoryBankConfigGenerationConfig {
   /** Optional. The model used to generate memories. Format: `projects/{project}/locations/{location}/publishers/google/models/{model}`. */
   model?: string;
+  /** Optional. Specifies the default trigger configuration for generating memories using `IngestEvents`. */
+  generationTriggerConfig?: MemoryGenerationTriggerConfig;
 }
 
 /** Configuration for how to perform similarity search on memories. */
@@ -1338,6 +1356,70 @@ export declare interface GetAgentEngineMemoryRequestParameters {
   /** Name of the agent engine. */
   name: string;
   config?: GetAgentEngineMemoryConfig;
+}
+
+/** The direct contents source event for ingesting events. */
+export declare interface IngestionDirectContentsSourceEvent {
+  /** Required. The content of the event. */
+  content?: genaiTypes.Content;
+  /** Optional. A unique identifier for the event. If an event with the same event_id is ingested multiple times, it will be de-duplicated. */
+  eventId?: string;
+  /** Optional. The time at which the event occurred. If provided, this timestamp will be used for ordering events within a stream. If not provided, the server-side ingestion time will be used. */
+  eventTime?: string;
+}
+
+/** The direct contents source for ingesting events. */
+export declare interface IngestionDirectContentsSource {
+  /** Required. The events to ingest. */
+  events?: IngestionDirectContentsSourceEvent[];
+}
+
+/** Config for ingesting events. */
+export declare interface IngestEventsConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** Waits for the underlying memory generation operation to complete
+      before returning. Defaults to false. */
+  waitForCompletion?: boolean;
+  /** Optional. Forces a flush of all pending events in the stream and triggers memory generation immediately bypassing any conditions configured in the `generation_trigger_config`. */
+  forceFlush?: boolean;
+}
+
+/** Parameters for purging agent engine memories. */
+export declare interface IngestEventsRequestParameters {
+  /** Name of the Agent Engine to ingest events into. */
+  name: string;
+  /** The ID of the stream to ingest events into. */
+  streamId?: string;
+  /** The direct memories source of the events that should be ingested. */
+  directContentsSource?: IngestionDirectContentsSource;
+  /** The scope of the memories that should be generated from the stream.
+
+      Memories will be consolidated across memories with the same scope. Scope
+      values cannot contain the wildcard character '*'. */
+  scope?: Record<string, string>;
+  /** The configuration for the memory generation trigger. */
+  generationTriggerConfig?: MemoryGenerationTriggerConfig;
+  config?: IngestEventsConfig;
+}
+
+/** Operation that ingests events into a memory bank. */
+export declare interface MemoryBankIngestEventsOperation {
+  /** The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the `name` should be a resource name ending with `operations/{unique_id}`. */
+  name?: string;
+  /** Service-specific metadata associated with the operation. It typically contains progress information and common metadata such as create time. Some services might not provide such metadata.  Any method that returns a long-running operation should document the metadata type, if any. */
+  metadata?: Record<string, unknown>;
+  /** If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available. */
+  done?: boolean;
+  /** The error result of the operation in case of failure or cancellation. */
+  error?: Record<string, unknown>;
 }
 
 /** Config for listing agent engine memories. */
