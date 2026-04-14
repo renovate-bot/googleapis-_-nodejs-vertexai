@@ -64,6 +64,22 @@ export enum ManagedTopicEnum {
   EXPLICIT_INSTRUCTIONS = 'EXPLICIT_INSTRUCTIONS',
 }
 
+/** The type of the memory. */
+export enum MemoryType {
+  /**
+   * Represents an unspecified memory type. This value should not be used.
+   */
+  MEMORY_TYPE_UNSPECIFIED = 'MEMORY_TYPE_UNSPECIFIED',
+  /**
+   * Indicates belonging to a collection of natural language memories.
+   */
+  NATURAL_LANGUAGE_COLLECTION = 'NATURAL_LANGUAGE_COLLECTION',
+  /**
+   * Indicates belonging to a structured profile.
+   */
+  STRUCTURED_PROFILE = 'STRUCTURED_PROFILE',
+}
+
 /** Represents the operator to apply to the filter. If not set, then EQUAL will be used. */
 export enum Operator {
   /**
@@ -487,6 +503,8 @@ export declare interface MemoryBankCustomizationConfig {
   scopeKeys?: string[];
   /** Optional. Represents configuration for customizing how memories are consolidated together. */
   consolidationConfig?: MemoryBankCustomizationConfigConsolidationConfig;
+  /** Optional. Indicates whether natural language memory generation should be disabled for all requests. By default, natural language memory generation is enabled. Set this to `true` when you only want to generate structured memories. */
+  disableNaturalLanguageMemories?: boolean;
 }
 
 /** Configuration for how to generate memories. */
@@ -521,6 +539,24 @@ export declare interface ReasoningEngineContextSpecMemoryBankConfigTtlConfig {
   memoryRevisionDefaultTtl?: string;
 }
 
+/** Represents the OpenAPI schema of the structured memories. */
+export declare interface StructuredMemorySchemaConfig {
+  /** Required. Represents the OpenAPI schema of the structured memories. */
+  memorySchema?: genaiTypes.Schema;
+  /** Required. Represents the ID of the schema. Must be 1-63 characters, start with a lowercase letter, and consist of lowercase letters, numbers, and hyphens. */
+  id?: string;
+  /** Optional. Represents the type of the structured memories associated with the schema. If not set, then `STRUCTURED_PROFILE` will be used. */
+  memoryType?: MemoryType;
+}
+
+/** Configuration for organizing structured memories within a scope. */
+export declare interface StructuredMemoryConfig {
+  /** Optional. Represents configuration of the structured memories' schemas. */
+  schemaConfigs?: StructuredMemorySchemaConfig[];
+  /** Optional. Represents the scope keys (i.e. 'user_id') for which to use this config. A request's scope must include all of the provided keys for the config to be used (order does not matter). If empty, then the config will be used for all requests that do not have a more specific config. Only one default config is allowed per Memory Bank. */
+  scopeKeys?: string[];
+}
+
 /** Specification for a Memory Bank. */
 export declare interface ReasoningEngineContextSpecMemoryBankConfig {
   /** Optional. Configuration for how to customize Memory Bank behavior for a particular scope. */
@@ -533,6 +569,8 @@ export declare interface ReasoningEngineContextSpecMemoryBankConfig {
   similaritySearchConfig?: ReasoningEngineContextSpecMemoryBankConfigSimilaritySearchConfig;
   /** Optional. Configuration for automatic TTL ("time-to-live") of the memories in the Memory Bank. If not set, TTL will not be applied automatically. The TTL can be explicitly set by modifying the `expire_time` of each Memory resource. */
   ttlConfig?: ReasoningEngineContextSpecMemoryBankConfigTtlConfig;
+  /** Optional. Configuration for organizing structured memories for a particular scope. */
+  structuredMemoryConfigs?: StructuredMemoryConfig[];
 }
 
 /** Configuration for how Agent Engine sub-resources should manage context. */
@@ -1065,6 +1103,14 @@ export declare interface CreateAgentEngineMemoryRequestParameters {
   config?: AgentEngineMemoryConfig;
 }
 
+/** Represents the structured value of the memory. */
+export declare interface MemoryStructuredContent {
+  /** Required. Represents the structured value of the memory. */
+  data?: Record<string, unknown>;
+  /** Required. Represents the schema ID for which this structured memory belongs to. */
+  schemaId?: string;
+}
+
 /** A memory. */
 export declare interface Memory {
   /** Output only. Represents the timestamp when this Memory was created. */
@@ -1097,6 +1143,10 @@ export declare interface Memory {
   ttl?: string;
   /** Output only. Represents the timestamp when this Memory was most recently updated. */
   updateTime?: string;
+  /** Optional. Represents the type of the memory. If not set, the `NATURAL_LANGUAGE_COLLECTION` type is used. If `STRUCTURED_COLLECTION` or `STRUCTURED_PROFILE` is used, then `structured_data` must be provided. */
+  memoryType?: MemoryType;
+  /** Optional. Represents the structured content of the memory. */
+  structuredContent?: MemoryStructuredContent;
 }
 
 /** Operation that has an agent engine memory as a response. */
@@ -1418,6 +1468,11 @@ export declare interface RetrieveAgentEngineMemoriesConfig {
       metadata.author = "agent 321"))`.
        */
   filterGroups?: MemoryConjunctionFilter[];
+  /** Specifies the types of memories to retrieve. If this field is empty
+      or not provided, the request will default to retrieving only memories of
+      type `NATURAL_LANGUAGE_COLLECTION`. If populated, the request will
+      retrieve memories matching any of the specified `MemoryType` values. */
+  memoryTypes?: MemoryType[];
 }
 
 /** Parameters for retrieving agent engine memories. */
@@ -1451,6 +1506,49 @@ export class RetrieveMemoriesResponse {
   nextPageToken?: string;
   /** The retrieved memories. */
   retrievedMemories?: RetrieveMemoriesResponseRetrievedMemory[];
+}
+
+/** Config for retrieving memory profiles. */
+export declare interface RetrieveMemoryProfilesConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+}
+
+/** Parameters for retrieving agent engine memory profiles. */
+export declare interface RetrieveMemoryProfilesRequestParameters {
+  /** Name of the agent engine to retrieve memory profiles from. */
+  name: string;
+  /** The scope of the memories to retrieve.
+
+      A memory must have exactly the same scope as the scope provided here to be
+      retrieved (i.e. same keys and values). Order does not matter, but it is
+      case-sensitive. */
+  scope: Record<string, string>;
+  config?: RetrieveMemoryProfilesConfig;
+}
+
+/** A memory profile. */
+export declare interface MemoryProfile {
+  /** Represents the ID of the schema. This ID corresponds to the `schema_id` defined inside the SchemaConfig, under StructuredMemoryCustomizationConfig. */
+  schemaId?: string;
+  /** Represents the profile data. */
+  profile?: Record<string, unknown>;
+}
+
+/** The response for retrieving memory profiles. */
+export class RetrieveProfilesResponse {
+  /** The retrieved structured profiles, which match the schemas under the
+      requested scope. The key is the ID of the schema that the profile is
+      linked with, which corresponds to the `schema_id` defined inside the
+      `SchemaConfig`, under `StructuredMemoryCustomizationConfig`. */
+  profiles?: Record<string, MemoryProfile>;
 }
 
 /** Config for rolling back a memory. */
@@ -1632,6 +1730,10 @@ export declare interface GetAgentEngineMemoryRevisionRequestParameters {
 export declare interface IntermediateExtractedMemory {
   /** Output only. Represents the fact of the extracted memory. */
   fact?: string;
+  /** Output only. Represents the explanation of why the information was extracted from the source content. */
+  context?: string;
+  /** Output only. Represents the structured value of the extracted memory. */
+  structuredData?: Record<string, unknown>;
 }
 
 /** A memory revision. */
@@ -1648,6 +1750,8 @@ export declare interface MemoryRevision {
   labels?: Record<string, string>;
   /** Identifier. Represents the resource name of the Memory Revision. Format: `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/memories/{memory}/revisions/{memory_revision}` */
   name?: string;
+  /** Output only. Represents the structured value of the memory at the time of revision creation. */
+  structuredData?: Record<string, unknown>;
 }
 
 /** Config for listing Agent Engine memory revisions. */

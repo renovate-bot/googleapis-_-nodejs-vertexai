@@ -9,6 +9,43 @@
 import * as common from '@google/genai/vertex_internal';
 import * as types from '../types.js';
 
+export function agentEngineOperationFromVertex(
+  fromObject: types.AgentEngineOperation,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromName = common.getValueByPath(fromObject, ['name']);
+  if (fromName != null) {
+    common.setValueByPath(toObject, ['name'], fromName);
+  }
+
+  const fromMetadata = common.getValueByPath(fromObject, ['metadata']);
+  if (fromMetadata != null) {
+    common.setValueByPath(toObject, ['metadata'], fromMetadata);
+  }
+
+  const fromDone = common.getValueByPath(fromObject, ['done']);
+  if (fromDone != null) {
+    common.setValueByPath(toObject, ['done'], fromDone);
+  }
+
+  const fromError = common.getValueByPath(fromObject, ['error']);
+  if (fromError != null) {
+    common.setValueByPath(toObject, ['error'], fromError);
+  }
+
+  const fromResponse = common.getValueByPath(fromObject, ['response']);
+  if (fromResponse != null) {
+    common.setValueByPath(
+      toObject,
+      ['response'],
+      reasoningEngineFromVertex(fromResponse),
+    );
+  }
+
+  return toObject;
+}
+
 export function createAgentEngineConfigToVertex(
   fromObject: types.CreateAgentEngineConfig,
   parentObject: Record<string, unknown>,
@@ -32,7 +69,11 @@ export function createAgentEngineConfigToVertex(
 
   const fromContextSpec = common.getValueByPath(fromObject, ['contextSpec']);
   if (parentObject !== undefined && fromContextSpec != null) {
-    common.setValueByPath(parentObject, ['contextSpec'], fromContextSpec);
+    common.setValueByPath(
+      parentObject,
+      ['contextSpec'],
+      reasoningEngineContextSpecToVertex(fromContextSpec),
+    );
   }
 
   const fromPscInterfaceConfig = common.getValueByPath(fromObject, [
@@ -226,6 +267,41 @@ export function listAgentEngineRequestParametersToVertex(
   return toObject;
 }
 
+export function listReasoningEnginesResponseFromVertex(
+  fromObject: types.ListReasoningEnginesResponse,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromSdkHttpResponse = common.getValueByPath(fromObject, [
+    'sdkHttpResponse',
+  ]);
+  if (fromSdkHttpResponse != null) {
+    common.setValueByPath(toObject, ['sdkHttpResponse'], fromSdkHttpResponse);
+  }
+
+  const fromNextPageToken = common.getValueByPath(fromObject, [
+    'nextPageToken',
+  ]);
+  if (fromNextPageToken != null) {
+    common.setValueByPath(toObject, ['nextPageToken'], fromNextPageToken);
+  }
+
+  const fromReasoningEngines = common.getValueByPath(fromObject, [
+    'reasoningEngines',
+  ]);
+  if (fromReasoningEngines != null) {
+    let transformedList = fromReasoningEngines;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return reasoningEngineFromVertex(item);
+      });
+    }
+    common.setValueByPath(toObject, ['reasoningEngines'], transformedList);
+  }
+
+  return toObject;
+}
+
 export function queryAgentEngineConfigToVertex(
   fromObject: types.QueryAgentEngineConfig,
   parentObject: Record<string, unknown>,
@@ -270,6 +346,359 @@ export function queryAgentEngineRequestParametersToVertex(
   return toObject;
 }
 
+export function reasoningEngineContextSpecFromVertex(
+  fromObject: types.ReasoningEngineContextSpec,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromMemoryBankConfig = common.getValueByPath(fromObject, [
+    'memoryBankConfig',
+  ]);
+  if (fromMemoryBankConfig != null) {
+    common.setValueByPath(
+      toObject,
+      ['memoryBankConfig'],
+      reasoningEngineContextSpecMemoryBankConfigFromVertex(
+        fromMemoryBankConfig,
+      ),
+    );
+  }
+
+  return toObject;
+}
+
+export function reasoningEngineContextSpecMemoryBankConfigFromVertex(
+  fromObject: types.ReasoningEngineContextSpecMemoryBankConfig,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromCustomizationConfigs = common.getValueByPath(fromObject, [
+    'customizationConfigs',
+  ]);
+  if (fromCustomizationConfigs != null) {
+    let transformedList = fromCustomizationConfigs;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return item;
+      });
+    }
+    common.setValueByPath(toObject, ['customizationConfigs'], transformedList);
+  }
+
+  const fromDisableMemoryRevisions = common.getValueByPath(fromObject, [
+    'disableMemoryRevisions',
+  ]);
+  if (fromDisableMemoryRevisions != null) {
+    common.setValueByPath(
+      toObject,
+      ['disableMemoryRevisions'],
+      fromDisableMemoryRevisions,
+    );
+  }
+
+  const fromGenerationConfig = common.getValueByPath(fromObject, [
+    'generationConfig',
+  ]);
+  if (fromGenerationConfig != null) {
+    common.setValueByPath(toObject, ['generationConfig'], fromGenerationConfig);
+  }
+
+  const fromSimilaritySearchConfig = common.getValueByPath(fromObject, [
+    'similaritySearchConfig',
+  ]);
+  if (fromSimilaritySearchConfig != null) {
+    common.setValueByPath(
+      toObject,
+      ['similaritySearchConfig'],
+      fromSimilaritySearchConfig,
+    );
+  }
+
+  const fromTtlConfig = common.getValueByPath(fromObject, ['ttlConfig']);
+  if (fromTtlConfig != null) {
+    common.setValueByPath(toObject, ['ttlConfig'], fromTtlConfig);
+  }
+
+  const fromStructuredMemoryConfigs = common.getValueByPath(fromObject, [
+    'structuredMemoryConfigs',
+  ]);
+  if (fromStructuredMemoryConfigs != null) {
+    let transformedList = fromStructuredMemoryConfigs;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return structuredMemoryConfigFromVertex(item);
+      });
+    }
+    common.setValueByPath(
+      toObject,
+      ['structuredMemoryConfigs'],
+      transformedList,
+    );
+  }
+
+  return toObject;
+}
+
+export function reasoningEngineContextSpecMemoryBankConfigToVertex(
+  fromObject: types.ReasoningEngineContextSpecMemoryBankConfig,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromCustomizationConfigs = common.getValueByPath(fromObject, [
+    'customizationConfigs',
+  ]);
+  if (fromCustomizationConfigs != null) {
+    let transformedList = fromCustomizationConfigs;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return item;
+      });
+    }
+    common.setValueByPath(toObject, ['customizationConfigs'], transformedList);
+  }
+
+  const fromDisableMemoryRevisions = common.getValueByPath(fromObject, [
+    'disableMemoryRevisions',
+  ]);
+  if (fromDisableMemoryRevisions != null) {
+    common.setValueByPath(
+      toObject,
+      ['disableMemoryRevisions'],
+      fromDisableMemoryRevisions,
+    );
+  }
+
+  const fromGenerationConfig = common.getValueByPath(fromObject, [
+    'generationConfig',
+  ]);
+  if (fromGenerationConfig != null) {
+    common.setValueByPath(toObject, ['generationConfig'], fromGenerationConfig);
+  }
+
+  const fromSimilaritySearchConfig = common.getValueByPath(fromObject, [
+    'similaritySearchConfig',
+  ]);
+  if (fromSimilaritySearchConfig != null) {
+    common.setValueByPath(
+      toObject,
+      ['similaritySearchConfig'],
+      fromSimilaritySearchConfig,
+    );
+  }
+
+  const fromTtlConfig = common.getValueByPath(fromObject, ['ttlConfig']);
+  if (fromTtlConfig != null) {
+    common.setValueByPath(toObject, ['ttlConfig'], fromTtlConfig);
+  }
+
+  const fromStructuredMemoryConfigs = common.getValueByPath(fromObject, [
+    'structuredMemoryConfigs',
+  ]);
+  if (fromStructuredMemoryConfigs != null) {
+    let transformedList = fromStructuredMemoryConfigs;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return structuredMemoryConfigToVertex(item);
+      });
+    }
+    common.setValueByPath(
+      toObject,
+      ['structuredMemoryConfigs'],
+      transformedList,
+    );
+  }
+
+  return toObject;
+}
+
+export function reasoningEngineContextSpecToVertex(
+  fromObject: types.ReasoningEngineContextSpec,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromMemoryBankConfig = common.getValueByPath(fromObject, [
+    'memoryBankConfig',
+  ]);
+  if (fromMemoryBankConfig != null) {
+    common.setValueByPath(
+      toObject,
+      ['memoryBankConfig'],
+      reasoningEngineContextSpecMemoryBankConfigToVertex(fromMemoryBankConfig),
+    );
+  }
+
+  return toObject;
+}
+
+export function reasoningEngineFromVertex(
+  fromObject: types.ReasoningEngine,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromEncryptionSpec = common.getValueByPath(fromObject, [
+    'encryptionSpec',
+  ]);
+  if (fromEncryptionSpec != null) {
+    common.setValueByPath(toObject, ['encryptionSpec'], fromEncryptionSpec);
+  }
+
+  const fromContextSpec = common.getValueByPath(fromObject, ['contextSpec']);
+  if (fromContextSpec != null) {
+    common.setValueByPath(
+      toObject,
+      ['contextSpec'],
+      reasoningEngineContextSpecFromVertex(fromContextSpec),
+    );
+  }
+
+  const fromCreateTime = common.getValueByPath(fromObject, ['createTime']);
+  if (fromCreateTime != null) {
+    common.setValueByPath(toObject, ['createTime'], fromCreateTime);
+  }
+
+  const fromDescription = common.getValueByPath(fromObject, ['description']);
+  if (fromDescription != null) {
+    common.setValueByPath(toObject, ['description'], fromDescription);
+  }
+
+  const fromDisplayName = common.getValueByPath(fromObject, ['displayName']);
+  if (fromDisplayName != null) {
+    common.setValueByPath(toObject, ['displayName'], fromDisplayName);
+  }
+
+  const fromEtag = common.getValueByPath(fromObject, ['etag']);
+  if (fromEtag != null) {
+    common.setValueByPath(toObject, ['etag'], fromEtag);
+  }
+
+  const fromLabels = common.getValueByPath(fromObject, ['labels']);
+  if (fromLabels != null) {
+    common.setValueByPath(toObject, ['labels'], fromLabels);
+  }
+
+  const fromName = common.getValueByPath(fromObject, ['name']);
+  if (fromName != null) {
+    common.setValueByPath(toObject, ['name'], fromName);
+  }
+
+  const fromSpec = common.getValueByPath(fromObject, ['spec']);
+  if (fromSpec != null) {
+    common.setValueByPath(toObject, ['spec'], fromSpec);
+  }
+
+  const fromUpdateTime = common.getValueByPath(fromObject, ['updateTime']);
+  if (fromUpdateTime != null) {
+    common.setValueByPath(toObject, ['updateTime'], fromUpdateTime);
+  }
+
+  const fromTrafficConfig = common.getValueByPath(fromObject, [
+    'trafficConfig',
+  ]);
+  if (fromTrafficConfig != null) {
+    common.setValueByPath(toObject, ['trafficConfig'], fromTrafficConfig);
+  }
+
+  return toObject;
+}
+
+export function structuredMemoryConfigFromVertex(
+  fromObject: types.StructuredMemoryConfig,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromSchemaConfigs = common.getValueByPath(fromObject, [
+    'schemaConfigs',
+  ]);
+  if (fromSchemaConfigs != null) {
+    let transformedList = fromSchemaConfigs;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return structuredMemorySchemaConfigFromVertex(item);
+      });
+    }
+    common.setValueByPath(toObject, ['schemaConfigs'], transformedList);
+  }
+
+  const fromScopeKeys = common.getValueByPath(fromObject, ['scopeKeys']);
+  if (fromScopeKeys != null) {
+    common.setValueByPath(toObject, ['scopeKeys'], fromScopeKeys);
+  }
+
+  return toObject;
+}
+
+export function structuredMemoryConfigToVertex(
+  fromObject: types.StructuredMemoryConfig,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromSchemaConfigs = common.getValueByPath(fromObject, [
+    'schemaConfigs',
+  ]);
+  if (fromSchemaConfigs != null) {
+    let transformedList = fromSchemaConfigs;
+    if (Array.isArray(transformedList)) {
+      transformedList = transformedList.map((item) => {
+        return structuredMemorySchemaConfigToVertex(item);
+      });
+    }
+    common.setValueByPath(toObject, ['schemaConfigs'], transformedList);
+  }
+
+  const fromScopeKeys = common.getValueByPath(fromObject, ['scopeKeys']);
+  if (fromScopeKeys != null) {
+    common.setValueByPath(toObject, ['scopeKeys'], fromScopeKeys);
+  }
+
+  return toObject;
+}
+
+export function structuredMemorySchemaConfigFromVertex(
+  fromObject: types.StructuredMemorySchemaConfig,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromMemorySchema = common.getValueByPath(fromObject, ['schema']);
+  if (fromMemorySchema != null) {
+    common.setValueByPath(toObject, ['memorySchema'], fromMemorySchema);
+  }
+
+  const fromId = common.getValueByPath(fromObject, ['id']);
+  if (fromId != null) {
+    common.setValueByPath(toObject, ['id'], fromId);
+  }
+
+  const fromMemoryType = common.getValueByPath(fromObject, ['memoryType']);
+  if (fromMemoryType != null) {
+    common.setValueByPath(toObject, ['memoryType'], fromMemoryType);
+  }
+
+  return toObject;
+}
+
+export function structuredMemorySchemaConfigToVertex(
+  fromObject: types.StructuredMemorySchemaConfig,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromMemorySchema = common.getValueByPath(fromObject, ['memorySchema']);
+  if (fromMemorySchema != null) {
+    common.setValueByPath(toObject, ['schema'], fromMemorySchema);
+  }
+
+  const fromId = common.getValueByPath(fromObject, ['id']);
+  if (fromId != null) {
+    common.setValueByPath(toObject, ['id'], fromId);
+  }
+
+  const fromMemoryType = common.getValueByPath(fromObject, ['memoryType']);
+  if (fromMemoryType != null) {
+    common.setValueByPath(toObject, ['memoryType'], fromMemoryType);
+  }
+
+  return toObject;
+}
+
 export function updateAgentEngineConfigToVertex(
   fromObject: types.UpdateAgentEngineConfig,
   parentObject: Record<string, unknown>,
@@ -293,7 +722,11 @@ export function updateAgentEngineConfigToVertex(
 
   const fromContextSpec = common.getValueByPath(fromObject, ['contextSpec']);
   if (parentObject !== undefined && fromContextSpec != null) {
-    common.setValueByPath(parentObject, ['contextSpec'], fromContextSpec);
+    common.setValueByPath(
+      parentObject,
+      ['contextSpec'],
+      reasoningEngineContextSpecToVertex(fromContextSpec),
+    );
   }
 
   const fromPscInterfaceConfig = common.getValueByPath(fromObject, [

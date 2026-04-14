@@ -346,6 +346,48 @@ export class Memories extends BaseModule {
     }
   }
 
+  async retrieveProfiles(
+    params: types.RetrieveMemoryProfilesRequestParameters,
+  ): Promise<types.RetrieveProfilesResponse> {
+    let response: Promise<types.RetrieveProfilesResponse>;
+
+    let path: string = '';
+    let queryParams: Record<string, string> = {};
+    if (this.apiClient.isVertexAI()) {
+      const body =
+        converters.retrieveMemoryProfilesRequestParametersToVertex(params);
+      path = common.formatMap(
+        '{name}/memories:retrieveProfiles',
+        body['_url'] as Record<string, unknown>,
+      );
+      queryParams = body['_query'] as Record<string, string>;
+      delete body['_url'];
+      delete body['_query'];
+      delete body['config'];
+
+      response = this.apiClient
+        .request({
+          path: path,
+          queryParams: queryParams,
+          body: JSON.stringify(body),
+          httpMethod: 'POST',
+          httpOptions: params.config?.httpOptions,
+          abortSignal: params.config?.abortSignal,
+        })
+        .then((httpResponse) => {
+          return httpResponse.json();
+        }) as Promise<types.RetrieveProfilesResponse>;
+
+      return response.then((resp) => {
+        const typedResp = new types.RetrieveProfilesResponse();
+        Object.assign(typedResp, resp);
+        return typedResp;
+      });
+    } else {
+      throw new Error('This method is only supported by the Vertex AI.');
+    }
+  }
+
   async rollbackInternal(
     params: types.RollbackAgentEngineMemoryRequestParameters,
   ): Promise<types.AgentEngineRollbackMemoryOperation> {

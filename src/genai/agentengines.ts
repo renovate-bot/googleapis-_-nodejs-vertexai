@@ -58,7 +58,9 @@ export class AgentEngines extends BaseModule {
           return httpResponse.json();
         }) as Promise<types.AgentEngineOperation>;
 
-      return response.then((resp) => {
+      return response.then((apiResponse) => {
+        const resp = converters.agentEngineOperationFromVertex(apiResponse);
+
         return resp as types.AgentEngineOperation;
       });
     } else {
@@ -137,7 +139,9 @@ export class AgentEngines extends BaseModule {
           return httpResponse.json();
         }) as Promise<types.ReasoningEngine>;
 
-      return response.then((resp) => {
+      return response.then((apiResponse) => {
+        const resp = converters.reasoningEngineFromVertex(apiResponse);
+
         return resp as types.ReasoningEngine;
       });
     } else {
@@ -176,7 +180,9 @@ export class AgentEngines extends BaseModule {
           return httpResponse.json();
         }) as Promise<types.ListReasoningEnginesResponse>;
 
-      return response.then((resp) => {
+      return response.then((apiResponse) => {
+        const resp =
+          converters.listReasoningEnginesResponseFromVertex(apiResponse);
         const typedResp = new types.ListReasoningEnginesResponse();
         Object.assign(typedResp, resp);
         return typedResp;
@@ -217,7 +223,9 @@ export class AgentEngines extends BaseModule {
           return httpResponse.json();
         }) as Promise<types.AgentEngineOperation>;
 
-      return response.then((resp) => {
+      return response.then((apiResponse) => {
+        const resp = converters.agentEngineOperationFromVertex(apiResponse);
+
         return resp as types.AgentEngineOperation;
       });
     } else {
@@ -298,7 +306,9 @@ export class AgentEngines extends BaseModule {
           return httpResponse.json();
         }) as Promise<types.AgentEngineOperation>;
 
-      return response.then((resp) => {
+      return response.then((apiResponse) => {
+        const resp = converters.agentEngineOperationFromVertex(apiResponse);
+
         return resp as types.AgentEngineOperation;
       });
     } else {
