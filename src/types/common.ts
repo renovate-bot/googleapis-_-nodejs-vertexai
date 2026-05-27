@@ -2665,15 +2665,65 @@ export declare interface UpdateSkillRequestParameters {
   config?: UpdateSkillConfig;
 }
 
+/** Config for listing skills. */
+export declare interface ListSkillsConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal to cancel the request. */
+  abortSignal?: AbortSignal;
+  pageSize?: number;
+  pageToken?: string;
+  /** Optional. The standard list filter. */
+  filter?: string;
+}
+
+/** Parameters for listing skills. */
+export declare interface ListSkillsRequestParameters {
+  config?: ListSkillsConfig;
+}
+
+/** Response for listing skills. */
+export class ListSkillsResponse {
+  /** Used to retain the full HTTP response. */
+  sdkHttpResponse?: genaiTypes.HttpResponse;
+  nextPageToken?: string;
+  /** List of Skills. */
+  skills?: Skill[];
+}
+
+/** Config for deleting a skill. */
+export declare interface DeleteSkillConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal to cancel the request. */
+  abortSignal?: AbortSignal;
+  /** Whether to wait for the long running operation to complete. */
+  waitForCompletion?: boolean;
+}
+
+/** Parameters for deleting a skill. */
+export declare interface DeleteSkillRequestParameters {
+  /** Required. The resource name of the Skill to delete. */
+  name: string;
+  config?: DeleteSkillConfig;
+}
+
+/** Operation for deleting a skill. */
+export declare interface DeleteSkillOperation {
+  /** The server-assigned name, which is only unique within the same service that originally returns it. If you use the default HTTP mapping, the `name` should be a resource name ending with `operations/{unique_id}`. */
+  name?: string;
+  /** Service-specific metadata associated with the operation. It typically contains progress information and common metadata such as create time. Some services might not provide such metadata.  Any method that returns a long-running operation should document the metadata type, if any. */
+  metadata?: Record<string, unknown>;
+  /** If the value is `false`, it means the operation is still in progress. If `true`, the operation is completed, and either `error` or `response` is available. */
+  done?: boolean;
+  /** The error result of the operation in case of failure or cancellation. */
+  error?: Record<string, unknown>;
+}
+
 export declare interface GetSkillOperationConfig {
   /** Used to override HTTP request options. */
   httpOptions?: genaiTypes.HttpOptions;
-  /** Abort signal which can be used to cancel the request.
-
-  NOTE: AbortSignal is a client-only operation. Using it to cancel an
-  operation will not cancel the request in the service. You will still
-  be charged usage for any applicable operations.
-       */
+  /** Abort signal to cancel the request. */
   abortSignal?: AbortSignal;
 }
 

@@ -57,6 +57,19 @@ export function createSkillRequestParametersToVertex(
   return toObject;
 }
 
+export function deleteSkillRequestParametersToVertex(
+  fromObject: types.DeleteSkillRequestParameters,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromName = common.getValueByPath(fromObject, ['name']);
+  if (fromName != null) {
+    common.setValueByPath(toObject, ['_url', 'name'], fromName);
+  }
+
+  return toObject;
+}
+
 export function getSkillOperationParametersToVertex(
   fromObject: types.GetSkillOperationParameters,
 ): Record<string, unknown> {
@@ -89,6 +102,47 @@ export function getSkillRequestParametersToVertex(
   const fromConfig = common.getValueByPath(fromObject, ['config']);
   if (fromConfig != null) {
     common.setValueByPath(toObject, ['config'], fromConfig);
+  }
+
+  return toObject;
+}
+
+export function listSkillsConfigToVertex(
+  fromObject: types.ListSkillsConfig,
+  parentObject: Record<string, unknown>,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromPageSize = common.getValueByPath(fromObject, ['pageSize']);
+  if (parentObject !== undefined && fromPageSize != null) {
+    common.setValueByPath(parentObject, ['_query', 'pageSize'], fromPageSize);
+  }
+
+  const fromPageToken = common.getValueByPath(fromObject, ['pageToken']);
+  if (parentObject !== undefined && fromPageToken != null) {
+    common.setValueByPath(parentObject, ['_query', 'pageToken'], fromPageToken);
+  }
+
+  const fromFilter = common.getValueByPath(fromObject, ['filter']);
+  if (parentObject !== undefined && fromFilter != null) {
+    common.setValueByPath(parentObject, ['_query', 'filter'], fromFilter);
+  }
+
+  return toObject;
+}
+
+export function listSkillsRequestParametersToVertex(
+  fromObject: types.ListSkillsRequestParameters,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromConfig = common.getValueByPath(fromObject, ['config']);
+  if (fromConfig != null) {
+    common.setValueByPath(
+      toObject,
+      ['config'],
+      listSkillsConfigToVertex(fromConfig, toObject),
+    );
   }
 
   return toObject;
