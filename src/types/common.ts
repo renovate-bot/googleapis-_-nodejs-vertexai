@@ -2583,6 +2583,45 @@ export declare interface Skill {
   skillSource?: SkillSource;
 }
 
+/** Config for retrieving skills. */
+export declare interface RetrieveSkillsConfig {
+  /** Used to override HTTP request options. */
+  httpOptions?: genaiTypes.HttpOptions;
+  /** Abort signal which can be used to cancel the request.
+
+  NOTE: AbortSignal is a client-only operation. Using it to cancel an
+  operation will not cancel the request in the service. You will still
+  be charged usage for any applicable operations.
+       */
+  abortSignal?: AbortSignal;
+  /** Optional. The maximum number of skills to return. The service may
+      return fewer than this value. If unspecified, at most 10 skills will be
+      returned. The maximum value is 100.
+       */
+  topK?: number;
+}
+
+/** Parameters for retrieving skills. */
+export declare interface RetrieveSkillsRequestParameters {
+  /** Required. The query to find matching skills. */
+  query: string;
+  config?: RetrieveSkillsConfig;
+}
+
+/** A retrieved skill from semantic search. */
+export declare interface RetrievedSkill {
+  /** The resource name of the skill. */
+  skillName?: string;
+  /** The description of the skill. */
+  description?: string;
+}
+
+/** Response for retrieving skills. */
+export class RetrieveSkillsResponse {
+  /** List of retrieved skills ranked by similarity. */
+  retrievedSkills?: RetrievedSkill[];
+}
+
 /** Config for creating a skill. */
 export declare interface CreateSkillConfig {
   /** Used to override HTTP request options. */

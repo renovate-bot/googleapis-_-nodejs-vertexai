@@ -148,6 +148,42 @@ export function listSkillsRequestParametersToVertex(
   return toObject;
 }
 
+export function retrieveSkillsConfigToVertex(
+  fromObject: types.RetrieveSkillsConfig,
+  parentObject: Record<string, unknown>,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromTopK = common.getValueByPath(fromObject, ['topK']);
+  if (parentObject !== undefined && fromTopK != null) {
+    common.setValueByPath(parentObject, ['_query', 'topK'], fromTopK);
+  }
+
+  return toObject;
+}
+
+export function retrieveSkillsRequestParametersToVertex(
+  fromObject: types.RetrieveSkillsRequestParameters,
+): Record<string, unknown> {
+  const toObject: Record<string, unknown> = {};
+
+  const fromQuery = common.getValueByPath(fromObject, ['query']);
+  if (fromQuery != null) {
+    common.setValueByPath(toObject, ['_query', 'query'], fromQuery);
+  }
+
+  const fromConfig = common.getValueByPath(fromObject, ['config']);
+  if (fromConfig != null) {
+    common.setValueByPath(
+      toObject,
+      ['config'],
+      retrieveSkillsConfigToVertex(fromConfig, toObject),
+    );
+  }
+
+  return toObject;
+}
+
 export function updateSkillConfigToVertex(
   fromObject: types.UpdateSkillConfig,
   parentObject: Record<string, unknown>,

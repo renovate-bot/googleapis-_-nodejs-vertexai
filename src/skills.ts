@@ -390,6 +390,49 @@ export class Skills extends BaseModule {
     }
   }
 
+  async retrieve(
+    params: types.RetrieveSkillsRequestParameters,
+  ): Promise<types.RetrieveSkillsResponse> {
+    let response: Promise<types.RetrieveSkillsResponse>;
+
+    let path: string = '';
+    let queryParams: Record<string, string> = {};
+    if (this.apiClient.isVertexAI()) {
+      const body = converters.retrieveSkillsRequestParametersToVertex(params);
+      path = common.formatMap(
+        'skills:retrieve',
+        body['_url'] as Record<string, unknown>,
+      );
+      queryParams = body['_query'] as Record<string, string>;
+      delete body['_url'];
+      delete body['_query'];
+      delete body['config'];
+
+      response = this.apiClient
+        .request({
+          path: path,
+          queryParams: queryParams,
+          body: JSON.stringify(body),
+          httpMethod: 'GET',
+          httpOptions: params.config?.httpOptions,
+          abortSignal: params.config?.abortSignal,
+        })
+        .then((httpResponse) => {
+          return httpResponse.json();
+        }) as Promise<types.RetrieveSkillsResponse>;
+
+      return response.then((resp) => {
+        const typedResp = new types.RetrieveSkillsResponse();
+        Object.assign(typedResp, resp);
+        return typedResp;
+      });
+    } else {
+      throw new Error(
+        'This method is only supported by the Gemini Enterprise Agent Platform (previously known as Vertex AI).',
+      );
+    }
+  }
+
   private async createInternal(
     params: types.CreateSkillRequestParameters,
   ): Promise<types.SkillOperation> {

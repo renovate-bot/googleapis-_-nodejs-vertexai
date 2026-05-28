@@ -147,4 +147,20 @@ describe('Skills', () => {
     client.verifyInteraction(0, fetchSpy.calls.argsFor(0));
     client.verifyAllInteractions();
   });
+
+  it('retrieves skills semantically', async () => {
+    const fetchSpy = client.setupReplay(
+        'skills_retrieve/test_retrieve_skills.vertex.json');
+    const response = await client.skills.retrieve({
+      query: 'stubby',
+      config: {
+        topK: 2,
+      }
+    });
+    expect(response.retrievedSkills).toBeDefined();
+    expect(response.retrievedSkills!.length).toBe(2);
+    expect(response.retrievedSkills![0].skillName).toBeDefined();
+    client.verifyInteraction(0, fetchSpy.calls.argsFor(0));
+    client.verifyAllInteractions();
+  });
 });
